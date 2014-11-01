@@ -1,0 +1,11 @@
+<template name="gameList">
+    <div class="container-fluid">
+        <h3>Listado de Partidas</h3>
+        <div class="games">
+            {{#each games}}
+                {{> gameItem }}
+            {{/each}}
+        </div>
+        {{#if currentUser}} {{> newGame }} {{/if}}
+    </div>
+</template>

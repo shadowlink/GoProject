@@ -1,0 +1,13 @@
+body { padding-top: 70px; }
+
+/*canvas{
+    width: 100% !important;
+    max-width: 600px;
+    height: auto !important;
+}*/
+
+#main{
+    width:100% !important;
+    max-width: 600px;
+    height: 600px;
+} 
