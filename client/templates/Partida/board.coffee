@@ -24,7 +24,6 @@ Template.board.rendered = ->
     img_white.src = "/img/pieces_white.png"
     tamStone = parseInt(w / NUMBER_OF_ROWS)
     window.addEventListener("resize", (e) => respondCanvas(e))
-    draw()
     
     respondCanvas= (e) ->
         canvas.setAttribute("width", $(container).width())

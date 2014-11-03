@@ -10,12 +10,13 @@
         <nav class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
               {{#if currentUser}}
-                <li class="active"><a href="#">Perfil</a></li>
+                <li class="active"><a href="#"><span class="glyphicon glyphicon-user"></span> Perfil</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#createModal"><span class="glyphicon glyphicon-th-large"></span> Nueva Partida</a></li>
               {{/if}}
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {{#if isNotActiveRoute regex='signIn'}}
-              <button type="button" id="nav-signinout" class="btn btn-default navbar-btn">{{signInOut}}</button>
+              <button type="button" id="nav-signinout" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-log-out"></span> {{signInOut}}</button>
             {{/if}}
           </ul>
         </nav>

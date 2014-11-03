@@ -1,11 +1,12 @@
 <template name="gameItem">
-    <div class="game">
-        <div class="game-content">
-            <h4><a href="{{pathFor 'game'}}">{{name}}</a></h4>
-            <p>
-                creada por
-            </p>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <a href="{{pathFor 'game'}}">{{name}}</a>
+            </h3>
         </div>
-        <canvas id={{id}} width="200" height="200"></canvas>
+        <div class="panel-body">
+            <canvas id={{id}} width="100" height="200"></canvas>
+        </div>
     </div>
 </template>
