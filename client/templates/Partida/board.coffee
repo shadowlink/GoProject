@@ -44,7 +44,7 @@ Template.board.rendered = ->
         return
 
     drawBoard= ->
-        ctx.fillStyle = "#FBF6D5"
+        ctx.fillStyle = "#F7F8E0"
         ctx.fillRect 0, 0, w, h
         return
 
