@@ -94,7 +94,12 @@ Template.gameItem.rendered = ->
         for move in moves
             ctx.drawImage img_black, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone
         return
-     
+    
+    $("canvas").each (index) ->
+        id = $(this).attr("id")
+        moves = Moves.find(gameId: id).fetch()
+        draw()    
+        
     Deps.autorun ->
         $("canvas").each (index) ->
             id = $(this).attr("id")

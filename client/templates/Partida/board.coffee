@@ -10,14 +10,16 @@ Template.board.rendered = ->
     canvas = document.getElementById(id)
     ctx = canvas.getContext("2d")
     container = $(canvas).parent()
+    canvas.setAttribute("width", $(container).width())
     canvas.addEventListener("click", (e) => OnClick(e))
     canvas.addEventListener("mousemove", (e) => mouseMove(e))
-    BLOCK_SIZE = canvas.height / NUMBER_OF_ROWS
+    BLOCK_SIZE = $(container).width()/ NUMBER_OF_ROWS
+    canvas.setAttribute("height", BLOCK_SIZE * NUMBER_OF_ROWS) 
     moves = Moves.find(gameId: id).fetch()
     color = null
     turno = false
-    h = parseInt(document.getElementById(id).getAttribute("height"))
-    w = parseInt(document.getElementById(id).getAttribute("width"))
+    h = BLOCK_SIZE * NUMBER_OF_ROWS
+    w = parseInt($(container).width())
     img_black = new Image()
     img_black.src = "/img/pieces_black.png"
     img_white = new Image()
@@ -31,8 +33,6 @@ Template.board.rendered = ->
         canvas.setAttribute("height", BLOCK_SIZE * NUMBER_OF_ROWS) 
         h = BLOCK_SIZE * NUMBER_OF_ROWS
         w = parseInt($(container).width())
-        console.log "h: " + h
-        console.log "w: " + w
         tamStone = parseInt(w / NUMBER_OF_ROWS)
         draw()
         return
