@@ -2,12 +2,24 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
-                <a href="{{pathFor 'game'}}">{{name}}</a>
+                <a>{{name}}</a>
             </h3>
         </div>
         <div class="panel-body">
-            <div class = "text-center">
-                <canvas class="canvas" id={{id}} width="200" height="200"></canvas>
+            <div class = "row">
+                <div class="col-sm-6">
+                    <canvas class="canvas" id={{id}} width="200" height="200"></canvas>
+                </div>
+                <div class="col-sm-6 text-center">
+                    <div class="well well-sm">
+                        <p><b>P1: </b>ShadowLink</p>
+                        <p><b>P2: </b>Raydark</p>
+                        <p>1280 - 0</p>
+                        <button onclick="window.location.href='{{pathFor 'game'}}'" type="button" class="btn btn-success">
+                            <span class="glyphicon glyphicon-chevron-right"></span> Entrar
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
