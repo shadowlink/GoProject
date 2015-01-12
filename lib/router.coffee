@@ -1,6 +1,5 @@
 Router.configure
     layoutTemplate: "layout"
-    loadingTemplate: "loading"
     waitOn: ->
         [
             Meteor.subscribe("games")
@@ -10,14 +9,15 @@ Router.configure
 Router.map ->
     @route "gameList",
         path: "/"
+        fastRender : true
 
     @route "game",
         path: "/game/:_id"
         data: ->
             Games.findOne @params._id
-
+        fastRender : true
+        
     @route "login",
         path: "/login"
     return
 
-Router.onBeforeAction "loading"

@@ -16,8 +16,8 @@ Template.board.rendered = ->
     BLOCK_SIZE = $(container).width()/ NUMBER_OF_ROWS
     canvas.setAttribute("height", BLOCK_SIZE * NUMBER_OF_ROWS) 
     moves = Moves.find(gameId: id).fetch()
-    color = null
-    turno = false
+    game = Games.find(_id: id).fetch()[0]
+    blockMove = false
     h = BLOCK_SIZE * NUMBER_OF_ROWS
     w = parseInt($(container).width())
     img_black = new Image()
@@ -101,44 +101,77 @@ Template.board.rendered = ->
 
     drawStones= ->        
         for move in moves
-            ctx.drawImage img_black, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone
+            ctx.drawImage img_black, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone if move.stone is 'b'
+            ctx.drawImage img_white, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone if move.stone is 'w'
         return
 
     OnClick= (e) ->
-        cell = getCursorPosition(e)
-        move =
-            gameId: id
-            column: cell.Column
-            row: cell.Row
-        Meteor.call "newMove", move, (err, result) ->
-            console.log "No se puede enviar la jugada " + err.reason  if err
+        #lastMove = Moves.find {gameId:id},
+        #            sort:
+        #                submitted: -1
+        #            limit: 1
+        #console.log lastMove.fetch()[0]._id
+        
+        #Comprobamos si es nuestro turno
+        game = Games.find(_id: id).fetch()[0]
+        turn = game.turn
+        user = Meteor.user().profile.Usuario
+        
+        if user is turn
+            #Evitamos que se puedan poner piezas varias veces en el intervalo de procesamiento de jugadas del servidor
+            if blockMove is false
+                blockMove = true
+                cell = getCursorPosition(e)
+                
+                #Determinamos el color de la piedra
+                if user is game.player1
+                    myStone = 'b'
+                else
+                    myStone = 'w'
+                
+                move =
+                    gameId: id
+                    column: cell.Column
+                    row: cell.Row
+                    submitted: new Date().getTime()
+                    stone: myStone
+                Meteor.call "newMove", move, (err, result) ->
+                    if err
+                        console.log "No se puede enviar la jugada " + err.reason 
+                    else
+                        Meteor.call "changeTurn", game, (err, result) ->
+                            if err
+                                console.log "Error al pasar el turno"
+                            else
+                                blockMove = false
+                    return
+                draw()
             return
-        draw()
-        return
 
     mouseMove= (e) ->
         draw()
-        x = undefined
-        y = undefined
+        user = Meteor.user().profile.Usuario
         offset = $("#" + id).offset()
         x = e.pageX - offset.left
         y = e.pageY - offset.top
-        row = undefined
-        column = undefined
-        posX = undefined
-        posY = undefined
         row = Math.floor(x / BLOCK_SIZE)
         column = Math.floor(y / BLOCK_SIZE)
         posX = (row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
         posY = (column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
         ctx.beginPath()
-        ctx.globalAlpha = 0.5
-        if color is "b"
-            ctx.fillStyle = "rgba(0, 0, 0)"
-        else ctx.fillStyle = "rgba(255, 255, 255)"  if color is "w"
         ctx.arc posX, posY, tamStone / 2, 0, 2 * Math.PI, true
+        if user is game.player1
+            ctx.fillStyle = "black" 
+            ctx.globalAlpha = 0.5
+        else 
+            ctx.fillStyle = "white" 
+            ctx.globalAlpha = 0.9
+        ctx.lineWidth = 2
+        ctx.strokeStyle = 'black'
+        ctx.stroke()
         ctx.fill()
         ctx.globalAlpha = 1.0
+        ctx.lineWidth = 1
         return
 
     getCursorPosition= (e) ->

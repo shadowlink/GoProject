@@ -7,6 +7,35 @@ Template.gameItem.helpers
     id: ->
         id = @_id
         @_id
+    
+    play: ->
+        if @player2 is ""
+            return true
+        else
+            return false
+    
+    myGame: ->
+        mygame = false
+        user = Meteor.user()
+        if @player1 is user.profile.Usuario or @player2 is user.profile.Usuario
+            mygame = true
+        return mygame
+            
+    player1: ->
+        return @player1
+        
+    player2: ->
+        return @player2
+
+Template.gameItem.events "click #playButton": (event) ->
+    if Meteor.user()
+        #Comprobamos que no este ya en otra partida
+        user = Meteor.user()
+        game = Games.find(userId: user._id).count()
+        if game is 0
+            Meteor.call "addUserToGame", user, this
+            Router.go "game", _id: this._id
+            return
         
 Template.gameItem.rendered = ->
     id = this.$("canvas").attr("id")
@@ -92,7 +121,8 @@ Template.gameItem.rendered = ->
   
     drawStones= -> 
         for move in moves
-            ctx.drawImage img_black, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone
+            ctx.drawImage img_black, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone if move.stone is 'b'
+            ctx.drawImage img_white, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone if move.stone is 'w'
         return
     
     $("canvas").each (index) ->

@@ -10,7 +10,7 @@ AccountsTemplates.configureRoute "verifyEmail"
 # Options
 AccountsTemplates.configure
     #defaultLayout: 'emptyLayout',
-    #showForgotPasswordLink: false,
+    showForgotPasswordLink: true,
     overrideLoginErrors: true
     enablePasswordChange: true
     sendVerificationEmail: false
@@ -28,8 +28,11 @@ AccountsTemplates.configure
     negativeFeedback: false
     positiveFeedback: true
 
+AccountsTemplates.addField
+  _id: "Usuario"
+  type: "text"
+  placeholder:
+    signUp: "Nombre de usuario"
 
-# Initialization
-Meteor.startup ->
-    AccountsTemplates.init()
-    return
+  required: true
+  minLength: 1

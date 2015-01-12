@@ -3,18 +3,20 @@
         <div class="col-sm-6">
             <div class="panel panel-success text-center">
                 <div class="panel-heading">
-                    <h6>ShadowLink</h6>
+                    <h6>{{player1}}</h6>
                 </div>
                 <div class="panel-body">1350</div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="panel panel-success text-center">
-                <div class="panel-heading">
-                    <h6>Raydark</h6>
+        {{#if player2}}
+            <div class="col-sm-6">
+                <div class="panel panel-success text-center">
+                    <div class="panel-heading">
+                        <h6>{{player2}}</h6>
+                    </div>
+                    <div class="panel-body">0</div>
                 </div>
-                <div class="panel-body">0</div>
             </div>
-        </div>
+        {{/if}}
     </div>
 </template>

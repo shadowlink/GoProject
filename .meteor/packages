@@ -8,7 +8,6 @@ sacha:spin@0.2.2
 coffeescript
 iron:router
 service-configuration
-ian:bootstrap-3
 accounts-facebook
 accounts-google
 accounts-password
@@ -16,4 +15,7 @@ accounts-twitter
 useraccounts:bootstrap
 zimme:iron-router-active
 meteorhacks:kadira
+msavin:mongoinspector
+meteorhacks:fast-render
+mizzao:bootstrap-3
 

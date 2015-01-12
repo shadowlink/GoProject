@@ -1,22 +1,26 @@
 <template name="header">
-  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <nav class="navbar-header">
           <a class="navbar-brand" href="{{pathFor 'gameList'}}">GoProject</a>
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
             <span class="sr-only">Toggle navigation</span>
           </button>
         </nav>
-        <nav class="navbar-collapse collapse">
+        <nav class="navbar-collapse collapse navbar-responsive-collapse">
           <ul class="nav navbar-nav">
               {{#if currentUser}}
-                <li class="active"><a href="#"><span class="glyphicon glyphicon-user"></span> Perfil</a></li>
-                <li><a href="#" data-toggle="modal" data-target="#createModal"><span class="glyphicon glyphicon-th-large"></span> Nueva Partida</a></li>
+                <li><a href="#"><span class="fui-user"></span> Perfil</a></li>
+                {{#if inGame}}
+                  <li><a href="{{pathFor 'game' _id = gameUrl}}"><span class="fui-time"></span> Partida en curso</a></li>
+                {{else}}
+                  <li><a href="#" data-toggle="modal" data-target="#createModal"><span class="fui-list-large-thumbnails"></span> Nueva Partida</a></li>
+                {{/if}}
               {{/if}}
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {{#if isNotActiveRoute regex='signIn'}}
-              <button type="button" id="nav-signinout" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-log-out"></span> {{signInOut}}</button>
+              <li><button type="button" id="nav-signinout" class="btn btn-default navbar-btn"><span class="fui-export"></span> {{signInOut}}</button></li>
             {{/if}}
           </ul>
         </nav>
