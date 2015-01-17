@@ -20,10 +20,12 @@ Meteor.methods AddGame: (newGame) ->
         player1: user.profile.Usuario
         player2: ""
         turn: user.profile.Usuario
+        points1: 0
+        points2: 0
         submitted: new Date().getTime()
     )
     Games.insert game
-    
+
 Meteor.methods addUserToGame: (user, game) ->
     Games.update
         _id: game._id,
@@ -31,7 +33,7 @@ Meteor.methods addUserToGame: (user, game) ->
             $set:
                 player2: user.profile.Usuario
         }
-        
+
 Meteor.methods changeTurn: (game) ->
     newTurn = ""
     if game.turn is game.player1
@@ -43,5 +45,21 @@ Meteor.methods changeTurn: (game) ->
         {
             $set:
                 turn: newTurn
-        }    
-        
+        }
+
+Meteor.methods updatePoints: (gameId, points, player) ->
+    game = Games.find(_id: gameId).fetch()[0]
+    if game.player1 is player
+      Games.update
+          _id: gameId,
+          {
+              $inc:
+                  points1: points
+          }
+    else
+      Games.update
+          _id: gameId,
+          {
+              $inc:
+                  points2: points
+          }

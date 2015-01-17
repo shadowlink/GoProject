@@ -11,12 +11,12 @@ Moves.allow
 Meteor.methods
     newMove: (move) ->
         validMove = true
-        
+
         #Comprobamos que no haya una pieza en la misma posicion
         myStone = Stones.find(row: move.row, column: move.column).count()
         if myStone > 0
             validMove = false
-        
+
         #Comprobar si el movimiento es participe de una cadena, si lo es, se añade a esa cadena
         ## Añadir a cadena o concatenar cadenas
         stones = Stones.find(gameId: move.gameId).fetch()
@@ -42,7 +42,7 @@ Meteor.methods
                 if stone.stone is move.stone
                     chains.push stone.chainId
                     #console.log "Abajo"
-        
+
         #Comprobamos si hay mas de una cadena adyacente y las concatenamos
         if chains.length > 1
             i=1
@@ -50,23 +50,23 @@ Meteor.methods
                 Meteor.call "updateChain", chains[0], chains[i]
                 i++
             Meteor.call "updateStone", move, chains[0]
-        
+
         if chains.length is 1
             Meteor.call "updateStone", move, chains[0]
-        
+
         if chains.length is 0
             chains[0] = generateUUID()
             Meteor.call "newStone", move, chains[0]
 
-        
+
         #Eliminar cadenas que no tengan libertades y que no sea la cadena recien creada
         #Evitar eliminar la piedra recien puesta
-        
+
         distinctChains = _.uniq(stones, false, (d) ->
             d.chainId
         )
         distinctValues = _.pluck(distinctChains, "chainId")
-        
+
         totalStones = Stones.find().fetch()
         #Crear un mapa en memoria con las posiciones de las piedras en el tablero
         board = new Array(19)
@@ -74,7 +74,7 @@ Meteor.methods
         while i < 19
           board[i] = new Array(19)
           i++
-          
+
         i = 0
         while i < 19
           j = 0
@@ -82,11 +82,11 @@ Meteor.methods
             board[i][j] = 'e'
             j++
           i++
-        
+
         for stone in totalStones
             board[stone.column][stone.row] = 'x'
-        
-        
+
+
         somethingDeleted = false
         for id in distinctValues
             if id != chains[0]
@@ -120,13 +120,15 @@ Meteor.methods
                         break
                 if deleteChain
                     #ELiminar cadena
-                    Meteor.call "removeStone", id
+                    points = Stones.find(chainId: id).count()
+                    Meteor.call "updatePoints", move.gameId, points, move.player
+                    Meteor.call "removeChain", id
                     somethingDeleted = true
-                
-                        
+
+
         #Ahora comprobamos explicitamente la cadena recien insertada para comprobar si es un suicidio y no permitirlo
         #Solo lo comprobado si no ha muerto niguna cadena
-        
+
         if somethingDeleted is false
             stones = Stones.find(chainId: chains[0]).fetch()
             deleteChain = true
@@ -159,15 +161,15 @@ Meteor.methods
                 #La cadena intenta suicidarse, no lo permitimos
                 #Eliminamos el ultimo movimiento
                 validMove = false
-        
-        
+
+
         #Insertar movimiento
         if validMove
             Moves.insert move
             Meteor.call "validateStone", move.row, move.column
         else
             Meteor.call "removeUniqStone", move.row, move.column
-            
+
         return validMove
 
 

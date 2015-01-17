@@ -14,7 +14,7 @@ Template.board.rendered = ->
     canvas.addEventListener("click", (e) => OnClick(e))
     canvas.addEventListener("mousemove", (e) => mouseMove(e))
     BLOCK_SIZE = $(container).width()/ NUMBER_OF_ROWS
-    canvas.setAttribute("height", BLOCK_SIZE * NUMBER_OF_ROWS) 
+    canvas.setAttribute("height", BLOCK_SIZE * NUMBER_OF_ROWS)
     stones = Stones.find(gameId: id).fetch()
     game = Games.find(_id: id).fetch()[0]
     blockMove = false
@@ -26,11 +26,11 @@ Template.board.rendered = ->
     img_white.src = "/img/pieces_white.png"
     tamStone = parseInt(w / NUMBER_OF_ROWS)
     window.addEventListener("resize", (e) => respondCanvas(e))
-    
+
     respondCanvas= (e) ->
         canvas.setAttribute("width", $(container).width())
         BLOCK_SIZE = $(container).width()/ NUMBER_OF_ROWS
-        canvas.setAttribute("height", BLOCK_SIZE * NUMBER_OF_ROWS) 
+        canvas.setAttribute("height", BLOCK_SIZE * NUMBER_OF_ROWS)
         h = BLOCK_SIZE * NUMBER_OF_ROWS
         w = parseInt($(container).width())
         tamStone = parseInt(w / NUMBER_OF_ROWS)
@@ -99,7 +99,7 @@ Template.board.rendered = ->
         ctx.fill()
         return
 
-    drawStones= ->        
+    drawStones= ->
         for stone in stones
             ctx.drawImage img_black, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'b' and stone.validMove is true
             ctx.drawImage img_white, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'w' and stone.validMove is true
@@ -111,33 +111,34 @@ Template.board.rendered = ->
         #                submitted: -1
         #            limit: 1
         #console.log lastMove.fetch()[0]._id
-        
+
         #Comprobamos si es nuestro turno
         game = Games.find(_id: id).fetch()[0]
         turn = game.turn
         user = Meteor.user().profile.Usuario
-        
+
         if user is turn
             #Evitamos que se puedan poner piezas varias veces en el intervalo de procesamiento de jugadas del servidor
             if blockMove is false
                 blockMove = true
                 cell = getCursorPosition(e)
-                
+
                 #Determinamos el color de la piedra
                 if user is game.player1
                     myStone = 'b'
                 else
                     myStone = 'w'
-                
+
                 move =
                     gameId: id
                     column: cell.Column
                     row: cell.Row
                     submitted: new Date().getTime()
                     stone: myStone
+                    player: game.turn
                 Meteor.call "newMove", move, (err, result) ->
                     if err
-                        console.log "No se puede enviar la jugada " + err.reason 
+                        console.log "No se puede enviar la jugada " + err.reason
                     else
                         if result
                             Meteor.call "changeTurn", game, (err, result) ->
@@ -164,10 +165,10 @@ Template.board.rendered = ->
         ctx.beginPath()
         ctx.arc posX, posY, tamStone / 2, 0, 2 * Math.PI, true
         if user is game.player1
-            ctx.fillStyle = "black" 
+            ctx.fillStyle = "black"
             ctx.globalAlpha = 0.5
-        else 
-            ctx.fillStyle = "white" 
+        else
+            ctx.fillStyle = "white"
             ctx.globalAlpha = 0.9
         ctx.lineWidth = 2
         ctx.strokeStyle = 'black'

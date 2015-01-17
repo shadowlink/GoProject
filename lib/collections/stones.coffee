@@ -17,7 +17,7 @@ Meteor.methods
             chainId: uuid
             validMove: false
         Stones.insert stone
-        
+
     updateStone: (move, chainId) ->
         stone =
             column: move.column
@@ -27,7 +27,7 @@ Meteor.methods
             chainId: chainId
             validMove: false
         Stones.insert stone
-    
+
     updateChain: (updatedChainId, chainId) ->
         Stones.update
             chainId: chainId,
@@ -38,13 +38,13 @@ Meteor.methods
             {
                 multi: true
             }
-    
-    removeStone: (chainId) ->
+
+    removeChain: (chainId) ->
         Stones.remove(chainId: chainId)
-        
+
     removeUniqStone: (row, column) ->
         Stones.remove(row: row, column: column)
-        
+
     validateStone: (row, column) ->
         Stones.update
             row: row, column: column,
@@ -55,5 +55,3 @@ Meteor.methods
             {
                 multi: true
             }
-
-
