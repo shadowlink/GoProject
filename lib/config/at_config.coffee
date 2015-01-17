@@ -33,6 +33,5 @@ AccountsTemplates.addField
   type: "text"
   placeholder:
     signUp: "Nombre de usuario"
-
   required: true
   minLength: 1
