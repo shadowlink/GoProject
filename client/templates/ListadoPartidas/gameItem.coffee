@@ -44,7 +44,7 @@ Template.gameItem.rendered = ->
     canvas = this.find "canvas"
     ctx = canvas.getContext("2d")
     BLOCK_SIZE = canvas.height / NUMBER_OF_ROWS
-    moves = Moves.find(gameId: id).fetch()
+    stones = Stones.find(gameId: id).fetch()
     color = null
     turno = false
     h = 200
@@ -120,20 +120,20 @@ Template.gameItem.rendered = ->
         return
   
     drawStones= -> 
-        for move in moves
-            ctx.drawImage img_black, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone if move.stone is 'b'
-            ctx.drawImage img_white, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone if move.stone is 'w'
+        for stone in stones
+            ctx.drawImage img_black, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'b'
+            ctx.drawImage img_white, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'w'
         return
     
     $("canvas").each (index) ->
         id = $(this).attr("id")
-        moves = Moves.find(gameId: id).fetch()
+        stones = Stones.find(gameId: id).fetch()
         draw()    
         
     Deps.autorun ->
         $("canvas").each (index) ->
             id = $(this).attr("id")
-            moves = Moves.find(gameId: id).fetch()
+            stones = Stones.find(gameId: id).fetch()
             draw()
             return
         

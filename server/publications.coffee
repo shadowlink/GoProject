@@ -3,3 +3,6 @@ Meteor.publish "games", ->
 
 Meteor.publish "moves", ->
     Moves.find()
+
+Meteor.publish "stones", ->
+    Stones.find()

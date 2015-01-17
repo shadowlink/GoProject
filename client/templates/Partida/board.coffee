@@ -15,7 +15,7 @@ Template.board.rendered = ->
     canvas.addEventListener("mousemove", (e) => mouseMove(e))
     BLOCK_SIZE = $(container).width()/ NUMBER_OF_ROWS
     canvas.setAttribute("height", BLOCK_SIZE * NUMBER_OF_ROWS) 
-    moves = Moves.find(gameId: id).fetch()
+    stones = Stones.find(gameId: id).fetch()
     game = Games.find(_id: id).fetch()[0]
     blockMove = false
     h = BLOCK_SIZE * NUMBER_OF_ROWS
@@ -100,9 +100,9 @@ Template.board.rendered = ->
         return
 
     drawStones= ->        
-        for move in moves
-            ctx.drawImage img_black, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone if move.stone is 'b'
-            ctx.drawImage img_white, move.row * BLOCK_SIZE, move.column * BLOCK_SIZE, tamStone, tamStone if move.stone is 'w'
+        for stone in stones
+            ctx.drawImage img_black, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'b' and stone.validMove is true
+            ctx.drawImage img_white, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'w' and stone.validMove is true
         return
 
     OnClick= (e) ->
@@ -139,11 +139,14 @@ Template.board.rendered = ->
                     if err
                         console.log "No se puede enviar la jugada " + err.reason 
                     else
-                        Meteor.call "changeTurn", game, (err, result) ->
-                            if err
-                                console.log "Error al pasar el turno"
-                            else
-                                blockMove = false
+                        if result
+                            Meteor.call "changeTurn", game, (err, result) ->
+                                if err
+                                    console.log "Error al pasar el turno"
+                                else
+                                    blockMove = false
+                        else
+                            blockMove = false
                     return
                 draw()
             return
@@ -198,7 +201,7 @@ Template.board.rendered = ->
 
     #Funciones auxiliares
     Deps.autorun ->
-        moves = Moves.find(gameId: id).fetch()
+        stones = Stones.find(gameId: id).fetch()
         draw()
 
 return

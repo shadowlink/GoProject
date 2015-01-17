@@ -4,18 +4,17 @@ Router.configure
         [
             Meteor.subscribe("games")
             Meteor.subscribe("moves")
+            Meteor.subscribe("stones")
         ]
 
 Router.map ->
     @route "gameList",
         path: "/"
-        fastRender : true
 
     @route "game",
         path: "/game/:_id"
         data: ->
             Games.findOne @params._id
-        fastRender : true
         
     @route "login",
         path: "/login"
