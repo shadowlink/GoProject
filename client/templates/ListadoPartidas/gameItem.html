@@ -15,13 +15,13 @@
                         <p><b>P1: </b>{{player1}}</p>
                         <p><b>P2: </b>{{player2}}</p>
                         <p>{{points1}} - {{points2}}</p>
-                        {{#if play}}
-                        <button id="playButton" type="button" class="btn btn-primary">
-                            <span class="fui-play"></span> Jugar
-                        </button>
-                        {{else}} {{#if myGame}}
+                        {{#if myGame}}
                         <button onclick="window.location.href='{{pathFor 'game'}}'" type="button" class="btn btn-success">
-                            <span class="fui-cmd"></span> Tu partida
+                          <span class="fui-cmd"></span> Tu partida
+                        </button>
+                        {{else}} {{#if play}}
+                        <button id="playButton" type="button" class="btn btn-primary">
+                          <span class="fui-play"></span> Jugar
                         </button>
                         {{else}}
                         <button onclick="window.location.href='{{pathFor 'game'}}'" type="button" class="btn btn-warning">

@@ -9,10 +9,13 @@ Template.gameItem.helpers
         @_id
 
     play: ->
+        canPlay = false
         if @player2 is ""
-            return true
-        else
-            return false
+            user = Meteor.user()
+            game = Games.find(userId: user._id).count()
+            if game is 0
+              canPlay = true
+        return canPlay
 
     myGame: ->
         mygame = false
