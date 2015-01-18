@@ -14,7 +14,7 @@ Meteor.methods
         remove = true
 
         #Comprobamos que no haya una pieza en la misma posicion
-        myStone = Stones.find(row: move.row, column: move.column).count()
+        myStone = Stones.find(gameId: move.gameId, row: move.row, column: move.column).count()
         if myStone > 0
             validMove = false
             remove = false
@@ -70,7 +70,7 @@ Meteor.methods
           )
           distinctValues = _.pluck(distinctChains, "chainId")
 
-          totalStones = Stones.find().fetch()
+          totalStones = Stones.find(gameId: move.gameId).fetch()
           #Crear un mapa en memoria con las posiciones de las piedras en el tablero
           board = new Array(19)
           i = 0

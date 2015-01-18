@@ -22,6 +22,7 @@ Meteor.methods AddGame: (newGame) ->
         turn: user.profile.Usuario
         points1: 0
         points2: 0
+        finalized: false
         submitted: new Date().getTime()
     )
     Games.insert game
@@ -63,3 +64,11 @@ Meteor.methods updatePoints: (gameId, points, player) ->
               $inc:
                   points2: points
           }
+
+Meteor.methods finalizeGame: (user, game) ->
+    Games.update
+        _id: game._id,
+        {
+            $set:
+                finalized: true
+        }

@@ -9,12 +9,12 @@ Template.header.events "click #nav-signinout": (event) ->
         Router.go "atSignIn"
     return
 
-Template.header.helpers 
+Template.header.helpers
     inGame: ->
         if Meteor.user()
             ingame = true;
             user = Meteor.user()
-            game = Games.find(player1: user.profile.Usuario).count() + Games.find(player2: user.profile.Usuario).count()
+            game = Games.find(player1: user.profile.Usuario, finalized: false).count() + Games.find(player2: user.profile.Usuario, finalized: false).count()
             ingame = false if game is 0
             return ingame
 
@@ -22,14 +22,13 @@ Template.header.helpers
         if Meteor.user()
             gameid = ""
             user = Meteor.user()
-            game = Games.find(player1: user.profile.Usuario).count()
+            game = Games.find(player1: user.profile.Usuario, finalized: false).count()
             if game is 0
-                game = Games.find(player2: user.profile.Usuario).count()
+                game = Games.find(player2: user.profile.Usuario, finalized: false).count()
                 if game is 0
                     gameid = ""
                 else
-                    gameid = Games.find(player2: user.profile.Usuario).fetch()[0]._id
+                    gameid = Games.find(player2: user.profile.Usuario, finalized: false).fetch()[0]._id
             else
-                gameid = Games.find(player1: user.profile.Usuario).fetch()[0]._id
+                gameid = Games.find(player1: user.profile.Usuario, finalized: false).fetch()[0]._id
         return gameid
-

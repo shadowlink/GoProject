@@ -12,7 +12,7 @@ Template.gameItem.helpers
         canPlay = false
         if @player2 is ""
             user = Meteor.user()
-            game = Games.find(userId: user._id).count()
+            game = Games.find(userId: user._id, finalized: false).count()
             if game is 0
               canPlay = true
         return canPlay
@@ -25,22 +25,22 @@ Template.gameItem.helpers
         return mygame
 
     player1: ->
-        return @player1
+        @player1
 
     player2: ->
-        return @player2
+        @player2
 
     points1: ->
-        return @points1
+        @points1
 
     points2: ->
-        return @points2
+        @points2
 
 Template.gameItem.events "click #playButton": (event) ->
     if Meteor.user()
         #Comprobamos que no este ya en otra partida
         user = Meteor.user()
-        game = Games.find(userId: user._id).count()
+        game = Games.find(userId: user._id, finalized: false).count()
         if game is 0
             Meteor.call "addUserToGame", user, this
             Router.go "game", _id: this._id

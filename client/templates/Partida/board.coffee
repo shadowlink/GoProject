@@ -117,7 +117,7 @@ Template.board.rendered = ->
         turn = game.turn
         user = Meteor.user().profile.Usuario
 
-        if user is turn
+        if user is turn and game.finalized is false
             #Evitamos que se puedan poner piezas varias veces en el intervalo de procesamiento de jugadas del servidor
             if blockMove is false
                 blockMove = true
@@ -153,30 +153,31 @@ Template.board.rendered = ->
             return
 
     mouseMove= (e) ->
-        draw()
-        user = Meteor.user().profile.Usuario
-        offset = $("#" + id).offset()
-        x = e.pageX - offset.left
-        y = e.pageY - offset.top
-        row = Math.floor(x / BLOCK_SIZE)
-        column = Math.floor(y / BLOCK_SIZE)
-        posX = (row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
-        posY = (column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
-        ctx.beginPath()
-        ctx.arc posX, posY, tamStone / 2, 0, 2 * Math.PI, true
-        if user is game.player1
-            ctx.fillStyle = "black"
-            ctx.globalAlpha = 0.5
-        else
-            ctx.fillStyle = "white"
-            ctx.globalAlpha = 0.9
-        ctx.lineWidth = 2
-        ctx.strokeStyle = 'black'
-        ctx.stroke()
-        ctx.fill()
-        ctx.globalAlpha = 1.0
-        ctx.lineWidth = 1
-        return
+        if game.finalized is false
+            draw()
+            user = Meteor.user().profile.Usuario
+            offset = $("#" + id).offset()
+            x = e.pageX - offset.left
+            y = e.pageY - offset.top
+            row = Math.floor(x / BLOCK_SIZE)
+            column = Math.floor(y / BLOCK_SIZE)
+            posX = (row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+            posY = (column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+            ctx.beginPath()
+            ctx.arc posX, posY, tamStone / 2, 0, 2 * Math.PI, true
+            if user is game.player1
+                ctx.fillStyle = "black"
+                ctx.globalAlpha = 0.5
+            else
+                ctx.fillStyle = "white"
+                ctx.globalAlpha = 0.9
+            ctx.lineWidth = 2
+            ctx.strokeStyle = 'black'
+            ctx.stroke()
+            ctx.fill()
+            ctx.globalAlpha = 1.0
+            ctx.lineWidth = 1
+            return
 
     getCursorPosition= (e) ->
         x = undefined
