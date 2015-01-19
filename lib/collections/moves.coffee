@@ -19,6 +19,12 @@ Meteor.methods
             validMove = false
             remove = false
 
+        #Comprobamos que no sea una jugada de KO
+        ko = KO.find(gameId: move.gameId, row: move.row, column: move.column).count()
+        if ko > 0
+          validMove = false
+          remove = false
+
         if validMove
           #Comprobar si el movimiento es participe de una cadena, si lo es, se añade a esa cadena
           ## Añadir a cadena o concatenar cadenas
@@ -87,7 +93,7 @@ Meteor.methods
             i++
 
           for stone in totalStones
-              board[stone.column][stone.row] = 'x'
+              board[stone.column][stone.row] = stone.stone
 
 
           somethingDeleted = false
@@ -100,22 +106,22 @@ Meteor.methods
                       if stone.row - 1 < 0
                           freedoms -= 1
                       else
-                          if board[stone.column][stone.row - 1] is 'x'
+                          unless board[stone.column][stone.row - 1] is 'e'
                               freedoms -= 1
                       if stone.row + 1 > 17
                           freedoms -= 1
                       else
-                          if board[stone.column][stone.row + 1] is 'x'
+                          unless board[stone.column][stone.row + 1] is 'e'
                               freedoms -= 1
                       if stone.column + 1 > 17
                           freedoms -= 1
                       else
-                          if board[stone.column + 1][stone.row] is 'x'
+                          unless board[stone.column + 1][stone.row] is 'e'
                               freedoms -= 1
                       if stone.column - 1 < 0
                           freedoms -= 1
                       else
-                          if board[stone.column - 1][stone.row] is 'x'
+                          unless board[stone.column - 1][stone.row] is 'e'
                               freedoms -= 1
                       if freedoms > 0
                           #console.log "Cadena que se salva"
@@ -131,7 +137,9 @@ Meteor.methods
 
           #Ahora comprobamos explicitamente la cadena recien insertada para comprobar si es un suicidio y no permitirlo
           #Solo lo comprobado si no ha muerto niguna cadena
-
+          columnKO = ''
+          rowKO = ''
+          existKO = false
           if somethingDeleted is false
               stones = Stones.find(chainId: chains[0]).fetch()
               deleteChain = true
@@ -140,22 +148,22 @@ Meteor.methods
                   if stone.row - 1 < 0
                       freedoms -= 1
                   else
-                      if board[stone.column][stone.row - 1] is 'x'
+                      unless board[stone.column][stone.row - 1] is 'e'
                           freedoms -= 1
                   if stone.row + 1 > 17
                       freedoms -= 1
                   else
-                      if board[stone.column][stone.row + 1] is 'x'
+                      unless board[stone.column][stone.row + 1] is 'e'
                           freedoms -= 1
                   if stone.column + 1 > 17
                       freedoms -= 1
                   else
-                      if board[stone.column + 1][stone.row] is 'x'
+                      unless board[stone.column + 1][stone.row] is 'e'
                           freedoms -= 1
                   if stone.column - 1 < 0
                       freedoms -= 1
                   else
-                      if board[stone.column - 1][stone.row] is 'x'
+                      unless board[stone.column - 1][stone.row] is 'e'
                           freedoms -= 1
                   if freedoms > 0
                       deleteChain = false;
@@ -164,12 +172,85 @@ Meteor.methods
                   #La cadena intenta suicidarse, no lo permitimos
                   #Eliminamos el ultimo movimiento
                   validMove = false
+          else #Puede producirse una situación de KO
+              stones = Stones.find(chainId: chains[0]).count()
+              if stones is 1 #No se puede producir un KO si la cadena consta de mas de 1 pieza
+                  stones = Stones.find(chainId: chains[0]).fetch()
 
+                  #Actualizamos el array del tablero para contemplar posibles cambios
+                  totalStones = Stones.find(gameId: move.gameId).fetch()
+                  i = 0
+                  while i < 19
+                    board[i] = new Array(19)
+                    i++
+
+                  i = 0
+                  while i < 19
+                    j = 0
+                    while j < 19
+                      board[i][j] = 'e'
+                      j++
+                    i++
+
+                  for stone in totalStones
+                      board[stone.column][stone.row] = stone.stone
+
+                  for stone in stones
+                      color = 'b' if stone.stone is 'w'
+                      color = 'w' if stone.stone is 'b'
+                      freedoms = 4
+                      if stone.row - 1 < 0
+                          freedoms -= 1
+                      else
+                          if board[stone.column][stone.row - 1] is color
+                              freedoms -= 1
+                          else
+                              columnKO = stone.column
+                              rowKO = stone.row - 1
+                      if stone.row + 1 > 17
+                          freedoms -= 1
+                      else
+                          if board[stone.column][stone.row + 1] is color
+                              freedoms -= 1
+                          else
+                              columnKO = stone.column
+                              rowKO = stone.row + 1
+                      if stone.column + 1 > 17
+                          freedoms -= 1
+                      else
+                          if board[stone.column + 1][stone.row] is color
+                              freedoms -= 1
+                          else
+                              columnKO = stone.column + 1
+                              rowKO = stone.row
+                      if stone.column - 1 < 0
+                          freedoms -= 1
+                      else
+                          if board[stone.column - 1][stone.row] is color
+                              freedoms -= 1
+                          else
+                              columnKO = stone.column - 1
+                              rowKO = stone.row
+                      if freedoms is 1
+                          #Existe KO
+                          existKO = true          
 
         #Insertar movimiento
         if validMove
             Moves.insert move
+            #Validamos el movimiento para que se muestre en el tablero
             Meteor.call "validateStone", move.row, move.column
+
+            #Eliminamos los posibles KO previos
+            Meteor.call "removeKO", move.gameId
+
+            #Añadimos la posicion de KO al tablero
+            if existKO
+                ko =
+                    gameId: move.gameId
+                    column: columnKO
+                    row: rowKO
+                Meteor.call "newKO", ko
         else
             if remove
               Meteor.call "removeUniqStone", move.row, move.column
