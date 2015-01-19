@@ -71,4 +71,6 @@ Meteor.methods finalizeGame: (user, game) ->
         {
             $set:
                 finalized: true
+            $inc:
+                points2: 6.5              
         }
