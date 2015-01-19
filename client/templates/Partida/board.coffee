@@ -117,7 +117,7 @@ Template.board.rendered = ->
         turn = game.turn
         user = Meteor.user().profile.Usuario
 
-        if user is turn and game.finalized is false
+        if user is turn and game.finalized is false and game.player2 != ''
             #Evitamos que se puedan poner piezas varias veces en el intervalo de procesamiento de jugadas del servidor
             if blockMove is false
                 blockMove = true
