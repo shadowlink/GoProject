@@ -6,3 +6,5 @@ Config
 .c9
 GoProject.sublime-project
 GoProject.sublime-workspace
+mup.json
+settings.json

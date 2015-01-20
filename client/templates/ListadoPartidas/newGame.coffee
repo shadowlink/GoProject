@@ -1,4 +1,5 @@
-Template.newGame.events = submit: (e, tmpl) ->
+Template.newGame.events =
+  submit: (e, tmpl) ->
     e.preventDefault()
     user = Meteor.user()
 
@@ -6,10 +7,11 @@ Template.newGame.events = submit: (e, tmpl) ->
     game = Games.find(userId: user._id, finalized: false).count()
 
     if game is 0
-        newGame = name: $("#nombre").val()
-        Meteor.call "AddGame", newGame, (err, result) ->
-            alert "No se puede crear la partida " + err.reason  if err
-            return
+      newGame =
+        name: $("#nombre").val()
+      Meteor.call "AddGame", newGame, (err, result) ->
+        alert "No se puede crear la partida " + err.reason  if err
+        return
     $('#createModal').modal('hide')
 
     #Redireccionamos a la partida recién creada

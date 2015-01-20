@@ -1,8 +1,8 @@
 Meteor.publish "games", ->
-    Games.find()
+  Games.find()
 
 Meteor.publish "moves", ->
-    Moves.find()
+  Moves.find()
 
 Meteor.publish "stones", ->
-    Stones.find()
+  Stones.find()
