@@ -241,6 +241,9 @@ Meteor.methods
             #Validamos el movimiento para que se muestre en el tablero
             Meteor.call "validateStone", move.row, move.column
 
+            #Puesto que no ha pasado turno, reseteamos la cadena de pasar turno
+            Meteor.call "passReset", move.gameId
+
             #Eliminamos los posibles KO previos
             Meteor.call "removeKO", move.gameId
 

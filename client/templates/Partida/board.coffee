@@ -141,7 +141,7 @@ Template.board.rendered = ->
                         console.log "No se puede enviar la jugada " + err.reason
                     else
                         if result
-                            Meteor.call "changeTurn", game, (err, result) ->
+                            Meteor.call "changeTurn", game, false, (err, result) ->
                                 if err
                                     console.log "Error al pasar el turno"
                                 else

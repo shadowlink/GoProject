@@ -22,6 +22,7 @@ Meteor.methods AddGame: (newGame) ->
         turn: user.profile.Usuario
         points1: 0
         points2: 0
+        pass: 0
         finalized: false
         submitted: new Date().getTime()
     )
@@ -35,17 +36,36 @@ Meteor.methods addUserToGame: (user, game) ->
                 player2: user.profile.Usuario
         }
 
-Meteor.methods changeTurn: (game) ->
+Meteor.methods changeTurn: (game, pass) ->
     newTurn = ""
     if game.turn is game.player1
         newTurn = game.player2
     else
         newTurn = game.player1
+
+    if pass
+      Games.update
+          _id: game._id,
+          {
+              $set:
+                  turn: newTurn
+              $inc:
+                  pass: 1
+          }
+    else
+      Games.update
+          _id: game._id,
+          {
+              $set:
+                  turn: newTurn
+          }
+
+Meteor.methods passReset: (gameId) ->
     Games.update
-        _id: game._id,
+        _id: gameId,
         {
             $set:
-                turn: newTurn
+                pass: 0
         }
 
 Meteor.methods updatePoints: (gameId, points, player) ->

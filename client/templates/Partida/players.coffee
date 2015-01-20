@@ -42,6 +42,8 @@ Template.players.events "click #surrender": (event) ->
 
 Template.players.events "click #pass": (event) ->
     user = Meteor.user()
-    if user.profile.Usuario is @turn
-        Meteor.call "changeTurn", this
+    if @pass > 0
+        Meteor.call "finalizeGame", user, this
+    else if user.profile.Usuario is @turn
+        Meteor.call "changeTurn", this, true
         return
