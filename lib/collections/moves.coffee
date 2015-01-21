@@ -58,10 +58,10 @@ Meteor.methods
         while i < chains.length
           Meteor.call "updateChain", chains[0], chains[i]
           i++
-        Meteor.call "updateStone", move, chains[0]
+        Meteor.call "newStone", move, chains[0]
 
       if chains.length is 1
-        Meteor.call "updateStone", move, chains[0]
+        Meteor.call "newStone", move, chains[0]
 
       if chains.length is 0
         chains[0] = generateUUID()
@@ -94,7 +94,6 @@ Meteor.methods
 
       for stone in totalStones
         board[stone.column][stone.row] = stone.stone
-
 
       somethingDeleted = false
       for id in distinctValues

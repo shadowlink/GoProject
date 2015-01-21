@@ -37,10 +37,16 @@
                             class="fui-alert-circle"></span>Rendirse
                     </button>
                 {{/if}}
-                {{#if myTurn and finalized = false}}
-                    <button type="button" id="pass" class="btn btn-warning navbar-btn"><span
-                            class="fui-arrow-right"></span>Pasar turno
-                    </button>
+                {{#if myTurn}}
+                    {{#if finalized}}
+                        <button type="button" id="passDisable2" class="btn btn-default navbar-btn disable"><span
+                                class="fui-arrow-right"></span>Pasar turno
+                        </button>
+                    {{else}}
+                        <button type="button" id="pass" class="btn btn-default navbar-btn"><span
+                                class="fui-arrow-right"></span>Pasar turno
+                        </button>
+                    {{/if}}
                 {{else}}
                     <button type="button" id="passDisable" class="btn btn-default navbar-btn disable"><span
                             class="fui-arrow-right"></span>Pasar turno

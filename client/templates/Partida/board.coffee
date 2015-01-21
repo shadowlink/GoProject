@@ -100,8 +100,27 @@ Template.board.rendered = ->
 
   drawStones = ->
     for stone in stones
-      ctx.drawImage img_black, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'b' and stone.validMove is true
-      ctx.drawImage img_white, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'w' and stone.validMove is true
+      if stone.spaceStone is false
+        ctx.drawImage img_black, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'b' and stone.validMove is true
+        ctx.drawImage img_white, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'w' and stone.validMove is true
+      else
+        if stone.stone is 'w'
+          color = "white"
+        else if stone.stone is 'b'
+          color = "black"
+
+        posX = (stone.row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+        posY = (stone.column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+        ctx.beginPath()
+        ctx.arc posX, posY, tamStone / 2, 0, 2 * Math.PI, true
+        ctx.fillStyle = color
+        ctx.globalAlpha = 0.5
+        ctx.lineWidth = 2
+        ctx.strokeStyle = 'black'
+        ctx.stroke()
+        ctx.fill()
+        ctx.globalAlpha = 0.9
+        ctx.lineWidth = 1
     return
 
   OnClick = (e) ->

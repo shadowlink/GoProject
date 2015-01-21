@@ -16,16 +16,7 @@ Meteor.methods
       gameId: move.gameId
       chainId: uuid
       validMove: false
-    Stones.insert stone
-
-  updateStone: (move, chainId) ->
-    stone =
-      column: move.column
-      row: move.row
-      stone: move.stone
-      gameId: move.gameId
-      chainId: chainId
-      validMove: false
+      spaceStone: false
     Stones.insert stone
 
   updateChain: (updatedChainId, chainId) ->
@@ -55,3 +46,14 @@ Meteor.methods
       {
         multi: true
       }
+
+  addSpaceStone: (space, color) ->
+    stone =
+      column: space.column
+      row: space.row
+      stone: color
+      gameId: space.gameId
+      chainId: space.chainId
+      validMove: true
+      spaceStone: true
+    Stones.insert stone
