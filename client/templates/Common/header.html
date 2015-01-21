@@ -11,7 +11,7 @@
             <nav class="navbar-collapse collapse navbar-responsive-collapse">
                 <ul class="nav navbar-nav">
                     {{#if currentUser}}
-                        <li><a href="#"><span class="fui-user"></span> Perfil</a>
+                        <li><a href="#"><span class="fui-user"></span> {{perfil}}</a>
                         </li>
                         {{#if inGame}}
                             <li><a href="{{pathFor 'game' _id = gameUrl}}"><span class="fui-time"></span> Partida en
@@ -25,9 +25,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {{#if isNotActiveRoute regex='signIn'}}
-                        <li>
-                            <button type="button" id="nav-signinout" class="btn btn-default navbar-btn"><span
-                                    class="fui-export"></span> {{signInOut}}</button>
+                        <li><a href="{{pathFor 'atSignIn'}}" id="nav-signinout"><span class="fui-export"></span> {{signInOut}}</a>
                         </li>
                     {{/if}}
                 </ul>
