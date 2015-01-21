@@ -6,3 +6,6 @@ Meteor.publish "moves", ->
 
 Meteor.publish "stones", ->
   Stones.find()
+
+Meteor.publish "chats", ->
+  Chats.find()

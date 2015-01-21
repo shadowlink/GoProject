@@ -5,6 +5,7 @@ Router.configure
       Meteor.subscribe("games")
       Meteor.subscribe("moves")
       Meteor.subscribe("stones")
+      Meteor.subscribe("chats")
     ]
 
 Router.map ->

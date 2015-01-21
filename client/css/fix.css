@@ -20,3 +20,8 @@ body { padding-top: 100px; }
 .navbar-nav.navbar-right:last-child {
     margin-right: 0;
 }
+
+#chatWell{
+    max-height: calc(64vh - 110px);
+    overflow-y: auto;
+}
