@@ -25,6 +25,7 @@ Meteor.methods
       points2: 0
       pass: 0
       finalized: false
+      surrender: ""
       submitted: new Date().getTime()
     )
     Games.insert game
@@ -86,7 +87,25 @@ Meteor.methods
             points2: points
         }
 
+  surrenderGame: (user, game) ->
+    Games.update
+      _id: game._id,
+      {
+        $set:
+          surrender: user.profile.Usuario
+          finalized: true
+      }
+
   finalizeGame: (user, game) ->
+    #Cambiamos el estado de la partida a finalizado
+    #Actualizacion del estado del juego
+    Games.update
+      _id: game._id,
+      {
+        $set:
+          finalized: true
+      }
+
     #Recuento final de territorios
 
     #Primero creamos una lista de cadenas de espacios vacios
@@ -107,6 +126,7 @@ Meteor.methods
       i++
     for stone in stones
       board[stone.column][stone.row] = stone.stone
+
 
     #Ahora debemos recorrer cada espacio vacio y crear cadenas de espacios vacios
     chains = []
@@ -210,8 +230,6 @@ Meteor.methods
     Games.update
       _id: game._id,
       {
-        $set:
-          finalized: true
         $inc:
           points1: blackPoints
           points2: whitePoints + 6.5

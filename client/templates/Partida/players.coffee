@@ -23,13 +23,19 @@ Template.players.helpers
 
   winner1: ->
     message = ""
-    if @points1 > @points2
+    if @surrender
+      unless @surrender is @player1
+        message = "(Vencedor)"
+    else if @points1 > @points2
       message = "(Vencedor)"
     return message
 
   winner2: ->
     message = ""
-    if @points2 > @points1
+    if @surrender
+      unless @surrender is @player2
+        message = "(Vencedor)"
+    else if @points2 > @points1
       message = "(Vencedor)"
     return message
 
@@ -38,7 +44,7 @@ Template.players.events
     if Meteor.user()
       #Comprobamos que no este ya en otra partida
       user = Meteor.user()
-      Meteor.call "finalizeGame", user, this
+      Meteor.call "surrenderGame", user, this
       return
 
   "click #pass": (event) ->

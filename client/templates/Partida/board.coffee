@@ -225,3 +225,5 @@ Template.board.rendered = ->
     draw()
 
 return
+
+
