@@ -7,13 +7,16 @@ accounts-twitter@1.0.4-winr.2
 application-configuration@1.0.5-winr.2
 autoupdate@1.1.5-winr.4
 base64@1.0.3-winr.2
+bengott:avatar@0.7.3
 binary-heap@1.0.3-winr.2
 blaze@2.0.5-winr.2
 blaze-tools@1.0.3-winr.2
 boilerplate-generator@1.0.3-winr.2
 callback-hook@1.0.3-winr.2
+ccorcos:transitioner@1.0.0
 check@1.0.4-win.0
 coffeescript@1.0.6-winr.2
+cwohlman:users-collection@1.0.3
 ddp@1.0.14-winr.4
 deps@1.0.7-winr.2
 ejson@1.0.6-winr.2
@@ -35,6 +38,9 @@ iron:location@1.0.7
 iron:middleware-stack@1.0.7
 iron:router@1.0.7
 iron:url@1.0.7
+jparker:crypto-core@0.1.0
+jparker:crypto-md5@0.1.1
+jparker:gravatar@0.3.1
 jquery@1.11.3-winr.2_1
 json@1.0.3-winr.2
 launch-screen@1.0.1-winr.2
@@ -44,11 +50,13 @@ localstorage@1.0.3-winr.2
 logging@1.0.6-winr.2
 meteor@1.1.5-winr.4
 meteor-platform@1.2.1-winr.3
+meteorhacks:subs-manager@1.2.4
 minifiers@1.1.4-winr.3
 minimongo@1.0.7-winr.2
 mizzao:bootstrap-3@3.3.1_1
 mobile-status-bar@1.0.3-winr.2
 mongo@1.0.12-winr.2
+mrt:publish-with-relations@0.1.5
 msavin:mongoinspector@2.1.2
 npm-bcrypt@0.7.8-winr.3
 oauth@1.1.4-winr.2
@@ -72,6 +80,7 @@ spacebars@1.0.5-winr.4
 spacebars-compiler@1.0.5-winr.2
 srp@1.0.3-winr.2
 standard-app-packages@1.0.5-winr.2
+stylus@1.0.7-winr.2
 templating@1.0.11-winr.5
 tracker@1.0.5-winr.4
 twitter@1.1.4-winr.2
@@ -80,6 +89,7 @@ underscore@1.0.3-winr.2
 url@1.0.4-winr.2
 useraccounts:bootstrap@1.4.1
 useraccounts:core@1.4.1
+velocityjs:velocityjs@1.2.1
 webapp@1.1.6-winr.4
 webapp-hashing@1.0.3-winr.2
 wizonesolutions:underscore-string@1.0.0

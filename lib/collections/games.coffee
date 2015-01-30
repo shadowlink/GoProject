@@ -20,6 +20,8 @@ Meteor.methods
       author: user.profile.Usuario
       player1: user.profile.Usuario
       player2: ""
+      player1Id: user._id
+      player2Id: ""
       turn: user.profile.Usuario
       points1: 0
       points2: 0
@@ -36,6 +38,7 @@ Meteor.methods
       {
         $set:
           player2: user.profile.Usuario
+          player2Id: user._id
       }
 
   changeTurn: (game, pass) ->
@@ -97,15 +100,6 @@ Meteor.methods
       }
 
   finalizeGame: (user, game) ->
-    #Cambiamos el estado de la partida a finalizado
-    #Actualizacion del estado del juego
-    Games.update
-      _id: game._id,
-      {
-        $set:
-          finalized: true
-      }
-
     #Recuento final de territorios
 
     #Primero creamos una lista de cadenas de espacios vacios
@@ -230,6 +224,8 @@ Meteor.methods
     Games.update
       _id: game._id,
       {
+        $set:
+          finalized: true
         $inc:
           points1: blackPoints
           points2: whitePoints + 6.5

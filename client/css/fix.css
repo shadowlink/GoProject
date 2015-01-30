@@ -1,5 +1,5 @@
 body {
-    padding-top: 50px;
+    padding-top: 80px;
     background-image: url(http://api.thumbr.it/whitenoise-361x370.png?background=f0f0f0ff&noise=decade&density=45&opacity=12) !important;
     background-repeat: repeat;
 }
@@ -19,7 +19,8 @@ body {
 #main {
     width: 100% !important;
     max-width: 800px;
-    height: 800px;
+    height: 100% !important;
+    max-height: 800px;
 }
 
 .text-center {
@@ -32,6 +33,7 @@ body {
 
 #chatWell {
     max-height: calc(64vh - 110px);
+    height: 350px;
     overflow-y: auto;
 }
 
@@ -66,13 +68,16 @@ hr.soften {
     margin: 0 auto -60px;
 }
 
-#push,
+#push{
+    height: 60px;
+}
+
 #footer {
     height: 60px;
 }
 
 #footer {
-    background-color: #2C3E50;
+    background-color: #34495E;
     -webkit-box-shadow: 0px -7px 5px -3px rgba(0,0,0,0.37);
     -moz-box-shadow: 0px -7px 5px -3px rgba(0,0,0,0.37);
     box-shadow: 0px -7px 5px -3px rgba(0,0,0,0.37);

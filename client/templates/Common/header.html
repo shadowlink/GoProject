@@ -2,7 +2,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" id="topNavbar">
         <div class="container-fluid">
             <nav class="navbar-header">
-                <a class="navbar-brand" href="{{pathFor 'gameList'}}">GoProject</a>
+                <a class="navbar-brand" href="{{pathFor 'topList'}}">GoProject</a>
                 <button type="button" class="navbar-toggle" data-toggle="collapse"
                         data-target=".navbar-responsive-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -22,10 +22,11 @@
                                     class="fui-list-large-thumbnails"></span> Nueva Partida</a>
                             </li>
                         {{/if}} {{/if}}
+                    <li><a href="{{pathFor 'gameList'}}"><span class="fui-list-columned"></span> Listado de partidas</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {{#if isNotActiveRoute regex='signIn'}}
-                        <li><a href="{{pathFor 'atSignIn'}}" id="nav-signinout"><span class="fui-export"></span> {{signInOut}}</a>
+                        <li><a href="{{pathFor 'atSignIn'}}" id="nav-signinout">{{signInOut}} </a>
                         </li>
                     {{/if}}
                 </ul>

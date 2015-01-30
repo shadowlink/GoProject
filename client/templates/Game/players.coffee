@@ -39,10 +39,21 @@ Template.players.helpers
       message = "(Vencedor)"
     return message
 
+  player1User: ->
+    user1 = Users.find("_id": @player1Id).fetch()[0]
+    return user1
+
+
+  player2User: ->
+    user2
+    if @player2
+      user2  = Users.find("_id": @player2Id).fetch()[0]
+    return user2
+
+
 Template.players.events
   "click #surrender": (event) ->
     if Meteor.user()
-      #Comprobamos que no este ya en otra partida
       user = Meteor.user()
       Meteor.call "surrenderGame", user, this
       return

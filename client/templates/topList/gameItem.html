@@ -1,0 +1,51 @@
+<template name="gameItem">
+    <div class="share mrl text-center" id="gameItem">
+        <div class="row-fluid text-center">
+            <h6>{{name}}</h6>
+        </div>
+        <hr class="soften"/>
+        <p>
+            <canvas class="canvas" id={{id}} width="200" height="200"></canvas>
+        </p>
+        <hr/>
+        <div class="row-fluid text-center">
+            <div class="col-md-4">
+                <b>{{player1}}</b>
+            </div>
+            <div class="col-md-4">
+                vs
+            </div>
+            <div class="col-md-4">
+                {{#if player2}}
+                    <b>{{player2}}</b>
+                {{else}}
+                    -
+                {{/if}}
+            </div>
+        </div>
+
+        <div class="row-fluid text-center">
+            <div class="col-md-4">
+                {{points1}}
+            </div>
+            <div class="col-md-4">
+                <span class="glyphicon glyphicon-flash"></span>
+            </div>
+            <div class="col-md-4">
+                {{points2}}
+            </div>
+        </div>
+        <p>-</p>
+
+        {{#if myGame}}
+            <a href="{{pathFor 'game'}}" class="btn btn-success btn-block btn-large"><span class="fui-cmd"></span> Tu
+                partida</a>
+        {{else}} {{#if play}}
+            <a id="playButton" href="{{pathFor 'game'}}#" class="btn btn-primary btn-block btn-large"><span
+                    class="fui-play"></span> Jugar</a>
+        {{else}}
+            <a href="{{pathFor 'game'}}" class="btn btn-warning btn-block btn-large"><span class="fui-eye"></span>
+                Ver</a>
+        {{/if}} {{/if}}
+    </div>
+</template>

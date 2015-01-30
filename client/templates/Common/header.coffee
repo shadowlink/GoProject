@@ -36,3 +36,6 @@ Template.header.helpers
 
   perfil: ->
     Meteor.user().profile.Usuario
+
+  myUser: ->
+    Meteor.user()

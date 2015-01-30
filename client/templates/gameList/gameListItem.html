@@ -1,0 +1,35 @@
+<template name="gameListItem">
+    <a href="#" class="list-group-item">
+        <div class="row">
+            <div class="col-md-3"><strong><span class="fui-list-small-thumbnails"></span> {{name}}
+            </strong></div>
+            <div class="col-md-6">
+                <div class="media text-center center-block" style="width: 255px;">
+                    <div class="media-left media-middle">
+                        {{> avatar shape = "rounded" user=player1data size="small"}}
+                    </div>
+                    <div class="media-body">
+                        <b>{{player1}}</b>
+                        <span class="glyphicon glyphicon-flash"></span>
+                        <b>{{player2}}</b>
+                    </div>
+                    <div class="media-right media-middle">
+                        {{> avatar shape = "rounded" user=player2data size="small"}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 text-right">
+                {{#if myGame}}
+                    <a href="{{pathFor 'game'}}" class="btn btn-success btn-block btn-sm"><span class="fui-cmd"></span> Tu
+                        partida</a>
+                {{else}} {{#if play}}
+                    <a id="playButton" href="{{pathFor 'game'}}#" class="btn btn-primary btn-block btn-sm"><span
+                            class="fui-play"></span> Jugar</a>
+                {{else}}
+                    <a href="{{pathFor 'game'}}" class="btn btn-warning btn-block btn-sm"><span class="fui-eye"></span>
+                        Ver</a>
+                {{/if}} {{/if}}
+            </div>
+        </div>
+    </a>
+</template>

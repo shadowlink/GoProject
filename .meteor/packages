@@ -18,3 +18,8 @@ msavin:mongoinspector
 mizzao:bootstrap-3
 
 percolate:synced-cron
+ccorcos:transitioner
+meteorhacks:subs-manager
+mrt:publish-with-relations
+bengott:avatar
+cwohlman:users-collection
