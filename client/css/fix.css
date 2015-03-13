@@ -1,20 +1,13 @@
-body {
-    padding-top: 80px;
-    background-image: url(http://api.thumbr.it/whitenoise-361x370.png?background=f0f0f0ff&noise=decade&density=45&opacity=12) !important;
-    background-repeat: repeat;
-}
-
-html,
-body {
-    height: 100%;
-    /* The html and body elements cannot have any padding or margin. */
-}
-
 /*canvas{
     width: 100% !important;
     max-width: 600px;
     height: auto !important;
 }*/
+
+
+.text-center {
+    text-align: center;
+}
 
 #main {
     width: 100% !important;
@@ -23,19 +16,12 @@ body {
     max-height: 800px;
 }
 
-.text-center {
-    text-align: center;
-}
-
-.navbar-nav.navbar-right:last-child {
-    margin-right: 0;
-}
-
 #chatWell {
-    max-height: calc(64vh - 110px);
+    max-height: 100%;
     height: 350px;
     overflow-y: auto;
 }
+
 
 #topNavbar {
     -webkit-box-shadow: 0px 4px 5px 2px rgba(0, 0, 0, 0.37);
@@ -54,33 +40,11 @@ body {
 
 hr.soften {
     height: 1px;
-    background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, .8), rgba(0, 0, 0, 0));
-    background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, .8), rgba(0, 0, 0, 0));
-    background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, .8), rgba(0, 0, 0, 0));
-    background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, .8), rgba(0, 0, 0, 0));
+    background-image: -webkit-linear-gradient(left, rgba(239, 83, 80, 0), rgba(239, 83, 80, .8), rgba(239, 83, 80, 0));
+    background-image: -moz-linear-gradient(left, rgba(239, 83, 80, 0), rgba(239, 83, 80, .8), rgba(239, 83, 80, 0));
+    background-image: -ms-linear-gradient(left, rgba(239, 83, 80, 0), rgba(239, 83, 80, .8), rgba(239, 83, 80, 0));
+    background-image: -o-linear-gradient(left, rgba(239, 83, 80, 0), rgba(239, 83, 80, .8), rgba(239, 83, 80, 0));
     border: 0;
-}
-
-#wrap {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -60px;
-}
-
-#push{
-    height: 60px;
-}
-
-#footer {
-    height: 60px;
-}
-
-#footer {
-    background-color: #34495E;
-    -webkit-box-shadow: 0px -7px 5px -3px rgba(0,0,0,0.37);
-    -moz-box-shadow: 0px -7px 5px -3px rgba(0,0,0,0.37);
-    box-shadow: 0px -7px 5px -3px rgba(0,0,0,0.37);
 }
 
 @media (max-width: 767px) {
@@ -91,3 +55,12 @@ hr.soften {
         padding-right: 20px;
     }
 }
+
+/*MAINCHAT ------------------------------------------------------*/
+
+.mainChatWell {
+    max-height: 100%;
+    height: 500px;
+    overflow-y: auto;
+}
+

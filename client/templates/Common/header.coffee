@@ -3,12 +3,13 @@ Template.header.helpers
     key = (if Meteor.user() then "signOut" else "signIn")
     T9n.get key
 
-Template.header.events "click #nav-signinout": (event) ->
-  if Meteor.user()
-    Meteor.logout()
-  else
-    Router.go "atSignIn"
-  return
+Template.header.events 
+  "click #nav-signinout": (event) ->
+    if Meteor.user()
+      Meteor.logout()
+    else
+      Router.go "atSignIn"
+    return
 
 Template.header.helpers
   inGame: ->
@@ -39,3 +40,22 @@ Template.header.helpers
 
   myUser: ->
     Meteor.user()
+
+  myTurn: ->
+    myTurn = false
+    user = Meteor.user()
+    game = Games.find(player1: user.profile.Usuario, finalized: false).count()
+    if game is 0
+      game = Games.find(player2: user.profile.Usuario, finalized: false).count()
+      unless game is 0
+        game = Games.find(player2: user.profile.Usuario, finalized: false).fetch()[0]
+        if game.turn is user.profile.Usuario
+          myTurn = true
+    else
+      game = Games.find(player1: user.profile.Usuario, finalized: false).fetch()[0]
+      if game.turn is user.profile.Usuario
+        myTurn = true
+    return myTurn
+
+Template.header.rendered = ->
+  $('.button-collapse').sideNav()

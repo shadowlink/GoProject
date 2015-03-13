@@ -1,36 +1,44 @@
 <template name="header">
-    <nav class="navbar navbar-inverse navbar-fixed-top" id="topNavbar">
-        <div class="container-fluid">
-            <nav class="navbar-header">
-                <a class="navbar-brand" href="{{pathFor 'topList'}}">GoProject</a>
-                <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target=".navbar-responsive-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                </button>
-            </nav>
-            <nav class="navbar-collapse collapse navbar-responsive-collapse">
-                <ul class="nav navbar-nav">
-                    {{#if currentUser}}
-                        <li><a href="#"><span class="fui-user"></span> {{perfil}}</a>
-                        </li>
-                        {{#if inGame}}
-                            <li><a href="{{pathFor 'game' _id = gameUrl}}"><span class="fui-time"></span> Partida en
-                                curso</a>
-                            </li>
-                        {{else}}
-                            <li><a href="#" data-toggle="modal" data-target="#createModal"><span
-                                    class="fui-list-large-thumbnails"></span> Nueva Partida</a>
-                            </li>
-                        {{/if}} {{/if}}
-                    <li><a href="{{pathFor 'gameList'}}"><span class="fui-list-columned"></span> Listado de partidas</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    {{#if isNotActiveRoute regex='signIn'}}
-                        <li><a href="{{pathFor 'atSignIn'}}" id="nav-signinout">{{signInOut}} </a>
-                        </li>
-                    {{/if}}
-                </ul>
-            </nav>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="{{pathFor 'topList'}}" class="brand-logo">GoProject</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="{{pathFor 'gameList'}}"><i class="mdi-action-group-work left"></i> Partidas</a></li>
+                {{#if currentUser}}
+                    <li><a href="#"><i class="mdi-image-timer-auto left"></i> {{perfil}}</a></li>
+                    {{#if inGame}}
+                        <li><a href="{{pathFor 'game' _id = gameUrl}}"><i class="mdi-av-timer left"></i> Mi partida 
+                            {{#if myTurn}}
+                                (T)
+                            {{/if}}
+                        </a></li>
+                    {{else}}
+                        <li><a href="{{pathFor 'newGame'}}"><i class="mdi-action-view-quilt left"></i> Nueva Partida</a></li>
+                    {{/if}} 
+                    <li><a href="{{pathFor 'mainChat'}}"><i class="mdi-communication-forum left"></i> Chat</a></li>
+                    <li><a href="#"><i class="mdi-social-group left"></i> Amigos</a></li>
+                {{/if}}
+                <li><a href="{{pathFor 'atSignIn'}}" id="nav-signinout"><i class="mdi-action-exit-to-app left"></i> {{signInOut}} </a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a href="{{pathFor 'gameList'}}"><i class="mdi-action-group-work left"></i> Partidas</a></li>   
+                {{#if currentUser}}
+                    <li><a href="#"><i class="mdi-image-timer-auto left"></i> {{perfil}}</a></li>
+                    {{#if inGame}}
+                        <li><a href="{{pathFor 'game' _id = gameUrl}}"><i class="mdi-av-timer left"></i> Mi partida 
+                            {{#if myTurn}}
+                                (T)
+                            {{/if}}
+                        </a></li>
+                    {{else}}
+                        <li><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-view-quilt left"></i> Nueva Partida</a></li>
+                    {{/if}} 
+                    <li><a href="{{pathFor 'mainChat'}}"><i class="mdi-communication-forum left"></i> Chat</a></li>
+                    <li><a href="#"><i class="mdi-social-group left"></i> Amigos</a></li>
+                {{/if}}
+                <li><a href="{{pathFor 'atSignIn'}}" id="nav-signinout"><i class="mdi-action-exit-to-app left"></i> {{signInOut}} </a></li>
+            </ul>
         </div>
     </nav>
 </template>

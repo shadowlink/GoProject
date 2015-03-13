@@ -22,3 +22,5 @@ Meteor.publish "usersGame", (gameId) ->
 Meteor.publish "users", ->
   Users.find()
 
+Meteor.publish "mainChatLines", ->
+  MainChatLines.find()

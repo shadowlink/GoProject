@@ -1,78 +1,56 @@
 <template name="players">
-    <div class="row-fluid text-center">
-        <div class="col-sm-12">
-            <div class="alert alert-info">
-                <div class="media">
-                    <div class="media-left media-middle">
-                        {{> avatar shape = "rounded" user=player1User size="small"}}
-                    </div>
-                    <div class="media-body">
-                        <b>{{player1}}</b> - {{points1}}
-                        {{#if finalized}}
-                            {{winner1}}
-                        {{/if}}
-                    </div>
-                </div>
-
+    <div class="row">
+        <div class="col s6">
+            <div class="card-panel  blue-grey valign-wrapper">
+                <i class="left valign">{{> avatar shape = "circle" user=player1User size="medium"}}</i>
+                <h5 class="valign white-text">{{player1}}</h5> &nbsp;&nbsp;&nbsp;
+                <h5 class="secondary-content valign right-align teal-text text-lighten-3">{{points1}}</h5>
+                {{#if finalized}}
+                    {{winner1}}
+                {{/if}}
             </div>
         </div>
-    </div>
-    <div class="row-fluid text-center">
         {{#if player2}}
-            <div class="col-sm-12">
-                <div class="alert alert-info">
-                    <div class="media">
-                        <div class="media-left media-middle">
-                            {{> avatar shape = "rounded" user=player2User size="small"}}
-                        </div>
-                        <div class="media-body">
-                            <b>{{player2}}</b> - {{points2}}
-                            {{#if finalized}}
-                                {{winner2}}
-                            {{/if}}
-                        </div>
-                    </div>
+            <div class="col s6">
+                <div class="card-panel blue-grey valign-wrapper">
+                    <i class="left">{{> avatar shape = "circle" user=player2User size="medium"}}</i>
+                    <h5 class="valign white-text">{{player2}}</h5> &nbsp;&nbsp;&nbsp;
+                    <h5 class="secondary-content valign right-align teal-text text-lighten-3">{{points2}}</h5>
+                    {{#if finalized}}
+                        {{winner2}}
+                    {{/if}}
                 </div>
             </div>
         {{/if}}
     </div>
-    <div class="row-fluid">
-        <div class="col-sm-6">
-            <div class="panel panel-default text-center">
+    <div class="row text-center">
+        <div class="col s12">
+            {{#if myGame}}
                 {{#if finalized}}
-                    <button type="button" id="surrenderDisable" class="btn btn-xs btn-default navbar-btn disable"><span
-                            class="fui-alert-circle"></span>Rendirse
-                    </button>
+                    <a id="surrenderDisable" class="waves-effect waves-light btn disabled"><span
+                            class="fui-alert-circle"></span><i class="mdi-av-new-releases left"></i>Rendir
+                    </a>
                 {{else}}
-                    <button type="button" id="surrender" class="btn btn-xs btn-danger navbar-btn"><span
-                            class="fui-alert-circle"></span>Rendirse
-                    </button>
+                    <a id="surrender" class="waves-effect waves-light btn"><span
+                            class="fui-alert-circle"></span><i class="mdi-av-new-releases left"></i>Rendir
+                    </a>
                 {{/if}}
                 {{#if myTurn}}
                     {{#if finalized}}
-                        <button type="button" id="passDisable2" class="btn btn-xs btn-default navbar-btn disable"><span
-                                class="fui-arrow-right"></span>Pasar turno
-                        </button>
+                        <a id="passDisable2" class="waves-effect waves-light btn disabled"><span
+                                class="fui-arrow-right"></span><i class="mdi-av-repeat left"></i>Pasar
+                        </a>
                     {{else}}
-                        <button type="button" id="pass" class="btn btn-xs btn-warning navbar-btn"><span
-                                class="fui-arrow-right"></span>Pasar turno
-                        </button>
+                        <a id="pass" class="waves-effect waves-light btn"><span
+                                class="fui-arrow-right"></span><i class="mdi-av-repeat left"></i>Pasar
+                        </a>
                     {{/if}}
                 {{else}}
-                    <button type="button" id="passDisable" class="btn btn-xs btn-default navbar-btn disable"><span
-                            class="fui-arrow-right"></span>Pasar turno
-                    </button>
+                    <a id="passDisable" class="waves-effect waves-light btn disabled"><span
+                            class="fui-arrow-right"></span><i class="mdi-av-repeat left"></i>Pasar
+                    </a>
                 {{/if}}
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="panel panel-default text-center">
-                {{#if finalized}}
-                    Partida finalizada
-                {{else}}
-                    Partida en curso
-                {{/if}}
-            </div>
+            {{/if}}
         </div>
     </div>
 </template>

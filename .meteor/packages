@@ -12,14 +12,16 @@ accounts-facebook
 accounts-google
 accounts-password
 accounts-twitter
-useraccounts:bootstrap
 zimme:iron-router-active
-msavin:mongoinspector
-mizzao:bootstrap-3
 
 percolate:synced-cron
 ccorcos:transitioner
 meteorhacks:subs-manager
-mrt:publish-with-relations
 bengott:avatar
 cwohlman:users-collection
+mizzao:user-status
+fortawesome:fontawesome
+juliancwirko:s-alert
+useraccounts:materialize
+materialize:materialize
+meteorhacks:fast-render

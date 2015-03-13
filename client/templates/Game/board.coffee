@@ -99,6 +99,7 @@ Template.board.rendered = ->
     return
 
   drawStones = ->
+    lastStone = null
     for stone in stones
       if stone.spaceStone is false
         ctx.drawImage img_black, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'b' and stone.validMove is true
@@ -121,6 +122,19 @@ Template.board.rendered = ->
         ctx.fill()
         ctx.globalAlpha = 0.9
         ctx.lineWidth = 1
+
+      lastStone = stone
+    #Marcador de ultima piedra puesta
+    if lastStone!=null 
+      posX = (lastStone.row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+      posY = (lastStone.column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+      ctx.beginPath()
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#A6172A'
+      ctx.arc posX, posY, (tamStone / 2) - 8, 0, 2 * Math.PI, true
+      ctx.stroke()
+      ctx.lineWidth = 1;
+
     return
 
   OnClick = (e) ->
@@ -171,9 +185,11 @@ Template.board.rendered = ->
       return
 
   mouseMove = (e) ->
-    if game.finalized is false
+    game = Games.find(_id: id).fetch()[0]
+    turn = game.turn
+    user = Meteor.user().profile.Usuario
+    if user is turn and game.finalized is false and blockMove is false
       draw()
-      user = Meteor.user().profile.Usuario
       offset = $("#" + id).offset()
       x = e.pageX - offset.left
       y = e.pageY - offset.top
@@ -195,7 +211,7 @@ Template.board.rendered = ->
       ctx.fill()
       ctx.globalAlpha = 1.0
       ctx.lineWidth = 1
-      return
+    return
 
   getCursorPosition = (e) ->
     x = undefined

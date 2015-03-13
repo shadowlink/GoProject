@@ -50,6 +50,13 @@ Template.players.helpers
       user2  = Users.find("_id": @player2Id).fetch()[0]
     return user2
 
+  myGame: ->
+    user = Meteor.user()
+    myGame = false
+    if user.profile.Usuario is @player1 or user.profile.Usuario is @player2
+      myGame = true
+    myGame
+
 
 Template.players.events
   "click #surrender": (event) ->
