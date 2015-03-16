@@ -58,6 +58,21 @@ Router.map ->
     path: "/login"
     fastRender: true
 
+  @route "friendlist",
+    path: "/friendlist"
+    waitOn: ->
+      subs.subscribe "friends"
+    fastRender: true
+
+  @route "profile",
+    path: "/profile/:_id"
+    data: ->
+      Users.findOne @params._id
+    waitOn: ->
+      subs.subscribe "allGames"
+      subs.subscribe "users"
+    fastRender: true
+
   @route "gameList",
     path: "/gameList"
     waitOn: ->
@@ -78,6 +93,7 @@ Router.map ->
     waitOn: ->
       subs.subscribe "users"
       subs.subscribe "mainChatLines"
+      subs.subscribe "friends"
     fastRender: true
     onBeforeAction: (pause) ->
       if Meteor.user()

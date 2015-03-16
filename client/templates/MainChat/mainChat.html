@@ -13,8 +13,9 @@
 			   		{{#each usersOnline}}
 			        	<li class="collection-item blue-grey">
 				        	<i class="left">{{> avatar shape = "circle" user=this size="extra-small"}}</i><b class ="white-text">{{profile.Usuario}}</b>
-				        	<a href="#!" class="secondary-content tooltipped" data-position="bottom" data-delay="50" data-tooltip="Petición de amistad"><i class="mdi-social-person-add orange-text"></i></a>
+				        	<a href="#!" class="secondary-content tooltipped friend-invite" data-position="bottom" data-delay="50" data-tooltip="Petición de amistad"><i class="mdi-social-person-add orange-text"></i></a>
 				        	<a href="#!" class="secondary-content tooltipped" data-position="bottom" data-delay="50" data-tooltip="Invitar a partida"><i class="mdi-maps-beenhere lime-text"></i></a>
+				        	<a href="{{pathFor 'profile' _id = this._id}}" class="secondary-content tooltipped" data-position="bottom" data-delay="50" data-tooltip="Ver perfil"><i class="mdi-action-assignment-ind  blue-text text-lighten-3"></i></a>
 			        	</li>
 			        {{/each}}
 			  	</ul>

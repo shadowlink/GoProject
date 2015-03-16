@@ -73,7 +73,7 @@ Template.gameItem.rendered = ->
     return
 
   drawBoard = ->
-    ctx.fillStyle = "#F7F8E0"
+    ctx.fillStyle = "#ffecb3"
     ctx.fillRect 0, 0, w, h
     return
 

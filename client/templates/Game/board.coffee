@@ -8,6 +8,7 @@ Template.board.rendered = ->
   NUMBER_OF_ROWS = 19
   canvas = document.getElementById(id)
   ctx = canvas.getContext("2d")
+  $("#main").width( $( window ).height() - 120)
   container = $(canvas).parent()
   canvas.setAttribute("width", $(container).width())
   canvas.addEventListener("click", (e) => OnClick(e))
@@ -27,6 +28,7 @@ Template.board.rendered = ->
   window.addEventListener("resize", (e) => respondCanvas(e))
 
   respondCanvas = (e) ->
+    $("#main").width( $( window ).height() - 120)
     canvas.setAttribute("width", $(container).width())
     BLOCK_SIZE = $(container).width() / NUMBER_OF_ROWS
     canvas.setAttribute("height", BLOCK_SIZE * NUMBER_OF_ROWS)
@@ -43,7 +45,7 @@ Template.board.rendered = ->
     return
 
   drawBoard = ->
-    ctx.fillStyle = "#F7F8E0"
+    ctx.fillStyle = "#ffecb3"
     ctx.fillRect 0, 0, w, h
     return
 

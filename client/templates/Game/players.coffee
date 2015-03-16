@@ -60,9 +60,16 @@ Template.players.helpers
 
 Template.players.events
   "click #surrender": (event) ->
-    if Meteor.user()
-      user = Meteor.user()
-      Meteor.call "surrenderGame", user, this
+    user = Meteor.user()
+    winner = ""
+    looser = user.profile.Usuario
+    if looser is @player1
+      winner = @player2
+    else
+      winner = @player1
+
+    if user
+      Meteor.call "surrenderGame", looser, winner, this
       return
 
   "click #pass": (event) ->

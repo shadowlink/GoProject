@@ -3,7 +3,7 @@
         <div class="col s6">
             <div class="card-panel  blue-grey valign-wrapper">
                 <i class="left valign">{{> avatar shape = "circle" user=player1User size="medium"}}</i>
-                <h5 class="valign white-text">{{player1}}</h5> &nbsp;&nbsp;&nbsp;
+                <a href="{{pathFor 'profile' _id = player1Id}}"><h5 class="valign white-text">{{player1}}</h5></a> &nbsp;&nbsp;&nbsp;
                 <h5 class="secondary-content valign right-align teal-text text-lighten-3">{{points1}}</h5>
                 {{#if finalized}}
                     {{winner1}}
@@ -14,7 +14,7 @@
             <div class="col s6">
                 <div class="card-panel blue-grey valign-wrapper">
                     <i class="left">{{> avatar shape = "circle" user=player2User size="medium"}}</i>
-                    <h5 class="valign white-text">{{player2}}</h5> &nbsp;&nbsp;&nbsp;
+                    <a href="{{pathFor 'profile' _id = player2Id}}"><h5 class="valign white-text">{{player2}}</h5></a> &nbsp;&nbsp;&nbsp;
                     <h5 class="secondary-content valign right-align teal-text text-lighten-3">{{points2}}</h5>
                     {{#if finalized}}
                         {{winner2}}

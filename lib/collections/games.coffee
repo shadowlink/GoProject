@@ -90,12 +90,13 @@ Meteor.methods
             points2: points
         }
 
-  surrenderGame: (user, game) ->
+  surrenderGame: (looser, winner,  game) ->
     Games.update
       _id: game._id,
       {
         $set:
-          surrender: user.profile.Usuario
+          surrender: looser
+          winner: winner
           finalized: true
       }
 
@@ -230,6 +231,20 @@ Meteor.methods
           points1: blackPoints
           points2: whitePoints + 6.5
       }
+
+    #Comprobamos quien ha ganado y actualizamos el ganador 
+    winner = ""
+    if game.points1 > game.points2
+      winner = game.player1
+    else if game.points1 < game.points2
+      winner = game.player2
+
+    Games.update
+      _id: game._id,
+      {
+        $set:
+          winner: winner
+      }    
 
 
 

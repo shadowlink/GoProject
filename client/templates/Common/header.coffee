@@ -58,4 +58,12 @@ Template.header.helpers
     return myTurn
 
 Template.header.rendered = ->
+  subs = new SubsManager();
   $('.button-collapse').sideNav()
+  Deps.autorun ->
+    subs.subscribe "notifications", Meteor.user()._id
+    notif = Notifications.find(userIdReceiver: Meteor.user()._id).fetch()
+    unless notif[0] is undefined
+      if notif[0].type is "friend" 
+        sAlert.error(notif[0].message, {effect: 'genie', position: 'right-bottom', timeout: 6000});
+      Meteor.call "removeNotif", notif[0]._id

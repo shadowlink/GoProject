@@ -6,7 +6,7 @@
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="{{pathFor 'gameList'}}"><i class="mdi-action-group-work left"></i> Partidas</a></li>
                 {{#if currentUser}}
-                    <li><a href="#"><i class="mdi-image-timer-auto left"></i> {{perfil}}</a></li>
+                    <li><a href="{{pathFor 'profile' _id = currentUser._id}}"><i class="mdi-image-timer-auto left"></i> {{perfil}}</a></li>
                     {{#if inGame}}
                         <li><a href="{{pathFor 'game' _id = gameUrl}}"><i class="mdi-av-timer left"></i> Mi partida 
                             {{#if myTurn}}
@@ -17,14 +17,14 @@
                         <li><a href="{{pathFor 'newGame'}}"><i class="mdi-action-view-quilt left"></i> Nueva Partida</a></li>
                     {{/if}} 
                     <li><a href="{{pathFor 'mainChat'}}"><i class="mdi-communication-forum left"></i> Chat</a></li>
-                    <li><a href="#"><i class="mdi-social-group left"></i> Amigos</a></li>
+                    <li><a href="{{pathFor 'friendlist'}}"><i class="mdi-social-group left"></i> Amigos</a></li>
                 {{/if}}
                 <li><a href="{{pathFor 'atSignIn'}}" id="nav-signinout"><i class="mdi-action-exit-to-app left"></i> {{signInOut}} </a></li>
             </ul>
             <ul class="side-nav" id="mobile-demo">
                 <li><a href="{{pathFor 'gameList'}}"><i class="mdi-action-group-work left"></i> Partidas</a></li>   
                 {{#if currentUser}}
-                    <li><a href="#"><i class="mdi-image-timer-auto left"></i> {{perfil}}</a></li>
+                    <li><a href="{{pathFor 'profile' _id = currentUser._id}}"><i class="mdi-image-timer-auto left"></i> {{perfil}}</a></li>
                     {{#if inGame}}
                         <li><a href="{{pathFor 'game' _id = gameUrl}}"><i class="mdi-av-timer left"></i> Mi partida 
                             {{#if myTurn}}
@@ -35,7 +35,7 @@
                         <li><a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="mdi-action-view-quilt left"></i> Nueva Partida</a></li>
                     {{/if}} 
                     <li><a href="{{pathFor 'mainChat'}}"><i class="mdi-communication-forum left"></i> Chat</a></li>
-                    <li><a href="#"><i class="mdi-social-group left"></i> Amigos</a></li>
+                    <li><a href="{{pathFor 'friendlist'}}"><i class="mdi-social-group left"></i> Amigos</a></li>
                 {{/if}}
                 <li><a href="{{pathFor 'atSignIn'}}" id="nav-signinout"><i class="mdi-action-exit-to-app left"></i> {{signInOut}} </a></li>
             </ul>

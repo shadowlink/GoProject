@@ -24,3 +24,9 @@ Meteor.publish "users", ->
 
 Meteor.publish "mainChatLines", ->
   MainChatLines.find()
+
+Meteor.publish "notifications", (userId) ->
+  Notifications.find userIdReceiver: userId
+
+Meteor.publish "friends", ->
+  Friends.find()

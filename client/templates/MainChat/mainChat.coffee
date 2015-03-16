@@ -29,11 +29,17 @@ Template.mainChat.events
           $("#chatText").val("")
         return
 
+  "click .friend-invite": (e) ->
+    numInvites = Friends.find("sender._id":Meteor.user()._id, "receiver._id": this._id).count()
+    if numInvites is 0
+      Meteor.call "addNotif", Meteor.user()._id, this._id, "friend", Meteor.user().profile.Usuario + " te ha enviado una solicitud de amistad."
+      Meteor.call "inviteFriend", Meteor.user(), this
+
 
 Template.mainChat.rendered = ->
   chat = MainChatLines.find().fetch()
   window.addEventListener("resize", (e) => respondCanvas(e))
-  $(".mainChatWell").height( $( window ).height() - 280 )
+  $(".mainChatWell").height( $( window ).height() - 310 )
   $(".mainChatWell").scrollTop($(".mainChatWell")[0].scrollHeight)
   #sAlert.info('Boom! Something went wrong!', {effect: 'bouncyflip', position: 'right-bottom', timeout: '5000'})
 
@@ -43,7 +49,7 @@ Template.mainChat.rendered = ->
     $('.tooltipped').tooltip({delay: 50});
 
   respondCanvas = (e) ->
-    $(".mainChatWell").height( $( window ).height() - 280 )
+    $(".mainChatWell").height( $( window ).height() - 310 )
     return
 
 return

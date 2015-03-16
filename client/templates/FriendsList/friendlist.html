@@ -1,0 +1,30 @@
+<template name="friendlist">
+    <div class="section">
+    	<h5 class="red-text text-lighten-2 text-center">~ Invitaciones recibidas ~</h5>
+	    <div class = "row">
+
+	        {{#each invitations}}
+		        <div class="col s2">
+		            <div class="card-panel   blue-grey darken-2 valign-wrapper">
+		                <i class="left valign">{{> avatar shape = "circle" user=this.sender size="small"}}</i>
+		                <h6 class="valign white-text">{{sender.profile.Usuario}}</h6> &nbsp;&nbsp;&nbsp;
+			        	<a href="#!" class="secondary-content tooltipped acceptInvite" data-position="bottom" data-delay="50" data-tooltip="Aceptar"><i class="mdi-navigation-check green-text text-lighten-3"></i></a>	
+			        	<a href="#!" class="secondary-content tooltipped cancelInvite" data-position="bottom" data-delay="50" data-tooltip="Cancelar"><i class="mdi-navigation-cancel red-text text-lighten-3"></i></a>	
+		            </div>
+		        </div>
+	        {{/each}}
+	    </div>
+	    <hr class="soften" />
+	    <h5 class="red-text text-lighten-2 text-center">~ Amigos ~</h5>
+    	<div class = "row">
+	        {{#each friends}}
+		        <div class="col s2">
+		            <div class="card-panel  blue-grey valign-wrapper">
+		                <i class="left valign">{{> avatar shape = "circle" user=this.receiver size="small"}}</i>
+		                <h6 class="valign white-text">{{receiver.profile.Usuario}}</h6> &nbsp;&nbsp;&nbsp;
+		            </div>
+		        </div>
+	        {{/each}}
+	    </div>
+	</div>
+</template>
