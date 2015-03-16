@@ -18,24 +18,24 @@ Se ha tratado de recrear un entorno donde los jugadores puedan hablar y jugar al
 **1. Instalación de Meteor**
 
 Windows
-https://github.com/meteor/meteor/wiki/Preview-of-Meteor-on-Windows
+``` https://github.com/meteor/meteor/wiki/Preview-of-Meteor-on-Windows ```
 
 Linux/Mac
-curl https://install.meteor.com/ | sh
+``` curl https://install.meteor.com/ | sh ```
 
 **2. Ejecución**
 
 Una vez instalado Meteor, nos poisicionamos en el directorio del proyecto a traves de la consola y ejecutamos el siguiente comando:
 
-_meteor update_
+``` meteor update ```
 
 Una vez haya comprobado y descrgado las dependencia lo ejecutamos mediante el comando:
 
-_meteor_
+``` meteor ```
 
 Ahora tan solo tendremos que abrir nuestro navegador y dirigirnos a la siguiente dirección:
 
-_http://localhost:3000/_
+``` http://localhost:3000/ ```
 
 
 
