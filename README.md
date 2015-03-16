@@ -1,10 +1,10 @@
-# GoProject (PFC)
+![](https://raw.githubusercontent.com/shadowlink/GoProject/master/public/img/big_logo.png)
 
 ## ¿Que es?
-GoProject es un proyecto de final de carrera que trata de explorar todas las características que aporta el framework Meteor. Para ello se ha desarrollado un juego multijugador online de Go o Baduk.
+GoProject es un proyecto de final de carrera de Ingeniería Informática para la Universidad de Alicante que trata de explorar todas las características que aporta el framework Meteor. Para ello se ha desarrollado un juego multijugador online de Go o Baduk.
 
 ## Características
-Se ha tratado de recrear un entorno donde los jugadores puedan hablar y jugar de Go de forma comoda, dotandolos de las herramientas necesarias para hacerlo.
+Se ha tratado de recrear un entorno donde los jugadores puedan hablar y jugar al Go de forma comoda, dotandolos de las herramientas necesarias para hacerlo.
 
 - Listado de partidas destacadas con vista previa de los tableros
 - Listado de amigos
@@ -35,7 +35,7 @@ _meteor_
 
 Ahora tan solo tendremos que abrir nuestro navegador y dirigirnos a la siguiente dirección:
 
-http://localhost:3000/
+_http://localhost:3000/_
 
 
 
