@@ -1,5 +1,12 @@
 {
-  "public": {
-
-  }
+    "public" : {
+        "sounds": {
+            "soundFx" : {
+                // sounds included in public directory are
+                // added to the `application` directory
+                // when building with cordova
+                "sound_stone" : "application/sound/stone_sound.wav"
+            }
+        }
+    }
 }

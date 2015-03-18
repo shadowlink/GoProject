@@ -14,15 +14,16 @@ accounts-password
 accounts-twitter
 zimme:iron-router-active
 
-percolate:synced-cron
 ccorcos:transitioner
 meteorhacks:subs-manager
 bengott:avatar
 cwohlman:users-collection
 mizzao:user-status
-fortawesome:fontawesome
 juliancwirko:s-alert
 useraccounts:materialize
 materialize:materialize
 meteorhacks:fast-render
 msavin:mongol
+usefulio:sync-methods
+tmeasday:presence
+meteorhacks:kadira

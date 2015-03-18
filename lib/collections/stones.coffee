@@ -17,6 +17,7 @@ Meteor.methods
       chainId: uuid
       validMove: false
       spaceStone: false
+      marked: false
     Stones.insert stone
 
   updateChain: (updatedChainId, chainId) ->
@@ -57,3 +58,25 @@ Meteor.methods
       validMove: true
       spaceStone: true
     Stones.insert stone
+
+  markChain: (chainId, gameId) ->
+    Stones.update
+      chainId: chainId, gameId: gameId,
+      {
+        $set:
+          marked: true
+      },
+      {
+        multi: true
+      }
+
+  unMarkChain: (chainId, gameId) ->
+    Stones.update
+      chainId: chainId, gameId: gameId,
+      {
+        $set:
+          marked: false
+      },
+      {
+        multi: true
+      }

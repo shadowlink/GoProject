@@ -5,9 +5,10 @@ Template.topList.helpers games: ->
     limit: 4
 
 Template.topList.rendered = ->
-  window.addEventListener("resize", (e) => respondCanvas(e))
-  $(".topList").height( $( window ).height() - 260 )
+	Session.set("currentRoomId", "topList")	
+	window.addEventListener("resize", (e) => respondCanvas(e))
+	$(".topList").height( $( window ).height() - 260 )
 
-  respondCanvas = (e) ->
-    $(".topList").height( $( window ).height() - 260 )
-    return
+	respondCanvas = (e) ->
+		$(".topList").height( $( window ).height() - 260 )
+		return

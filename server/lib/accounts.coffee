@@ -1,6 +1,6 @@
 Meteor.startup ->
   #Conexión con el monitor Kadira
-  #Kadira.connect "9qQBC5gH8Bya2B8Be", "a863174e-f80b-4cdd-80b4-42a324f3abbe"
+  Kadira.connect "9qQBC5gH8Bya2B8Be", "a863174e-f80b-4cdd-80b4-42a324f3abbe"
 
   # Eliminar la configuración de servicios si ya están configurados
   ServiceConfiguration.configurations.remove $or: [

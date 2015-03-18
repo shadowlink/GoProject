@@ -16,5 +16,6 @@ Template.friendlist.events
 		Meteor.call "cancelFriend", this._id
 
 Template.friendlist.rendered = ->
-  Deps.autorun ->
-    $('.tooltipped').tooltip({delay: 50});
+	Session.set("currentRoomId", "friendList")	
+	Deps.autorun ->
+		$('.tooltipped').tooltip({delay: 50});

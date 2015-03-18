@@ -107,12 +107,12 @@ Meteor.methods
             else
               unless board[stone.column][stone.row - 1] is 'e'
                 freedoms -= 1
-            if stone.row + 1 > 17
+            if stone.row + 1 > 18
               freedoms -= 1
             else
               unless board[stone.column][stone.row + 1] is 'e'
                 freedoms -= 1
-            if stone.column + 1 > 17
+            if stone.column + 1 > 18
               freedoms -= 1
             else
               unless board[stone.column + 1][stone.row] is 'e'
@@ -149,12 +149,12 @@ Meteor.methods
           else
             unless board[stone.column][stone.row - 1] is 'e'
               freedoms -= 1
-          if stone.row + 1 > 17
+          if stone.row + 1 > 18
             freedoms -= 1
           else
             unless board[stone.column][stone.row + 1] is 'e'
               freedoms -= 1
-          if stone.column + 1 > 17
+          if stone.column + 1 > 18
             freedoms -= 1
           else
             unless board[stone.column + 1][stone.row] is 'e'

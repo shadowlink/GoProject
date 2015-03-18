@@ -44,6 +44,7 @@ Router.map ->
       subs.subscribe "usersGame"
       subs.subscribe "stones", @params._id
       subs.subscribe "chats", @params._id
+      subs.subscribe "userPresence"
     fastRender: true
     onBeforeAction: (pause) ->
       if Meteor.user()

@@ -15,6 +15,7 @@ Template.asigName.events =
     return
 
 Template.asigName.rendered = ->
+    Session.set("currentRoomId", "asigName")
     user = Meteor.user()
     unless Meteor.user().profile.Usuario is ""
         Router.go "/"

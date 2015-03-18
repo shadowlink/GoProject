@@ -6,3 +6,6 @@ Template.gameList.helpers
 
   myUser: ->
     Meteor.user()
+
+Template.gameList.rendered = ->
+ 	Session.set("currentRoomId", "gameList")

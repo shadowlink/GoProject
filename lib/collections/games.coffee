@@ -26,8 +26,11 @@ Meteor.methods
       points1: 0
       points2: 0
       pass: 0
+      phase: "play"
       finalized: false
       surrender: ""
+      confirmPlayer1:false
+      confirmPlayer2:false
       submitted: new Date().getTime()
     )
     Games.insert game
@@ -98,14 +101,40 @@ Meteor.methods
           surrender: looser
           winner: winner
           finalized: true
+          phase: "finalized"
       }
 
-  finalizeGame: (user, game) ->
-    #Recuento final de territorios
+  changeGamePhase: (game, phase) ->
+    Games.update
+      _id: game._id,
+      {
+        $set:
+          phase: phase
+      }    
 
+  confirm: (game, user) ->
+    game = Games.find(_id: game._id).fetch()[0]
+    if user.profile.Usuario is game.player1
+      Games.update
+        _id: game._id,
+        {
+          $set:
+            confirmPlayer1: true
+        }  
+    else
+      Games.update
+        _id: game._id,
+        {
+          $set:
+            confirmPlayer2: true
+        }  
+
+ Meteor.syncMethods
+  finalizeGame: (game, callback) ->
+    #Recuento final de territorios
     #Primero creamos una lista de cadenas de espacios vacios
     #Para ello primero necesitamos un mapa del estado del tablero
-    stones = Stones.find(gameId: game._id).fetch()
+    stones = Stones.find(gameId: game._id, marked:false).fetch()
     board = new Array(19)
     i = 0
     while i < 19
@@ -122,9 +151,9 @@ Meteor.methods
     for stone in stones
       board[stone.column][stone.row] = stone.stone
 
-
     #Ahora debemos recorrer cada espacio vacio y crear cadenas de espacios vacios
     chains = []
+    spacesList = []
     i = 0
     while i < 19
       j = 0
@@ -134,37 +163,57 @@ Meteor.methods
           if i - 1 >= 0
             if board[i - 1][j] is 's' #espacio conocido
               #Recuperamos la id de cadena de ese espacio
-              space = Spaces.find(gameId: game._id, column: i - 1, row: j).fetch()[0]
-              chains.push(space.chainId)
+              chainId = getChainId(i-1, j, spacesList)
+              chains.push(chainId)
           if i + 1 <= 18
             if board[i + 1][j] is 's' #espacio conocido
-              space = Spaces.find(gameId: game._id, column: i + 1, row: j).fetch()[0]
-              chains.push(space.chainId)
+              chainId = getChainId(i+1, j, spacesList)
+              chains.push(chainId)
           if j + 1 <= 18
             if board[i][j + 1] is 's' #espacio conocido
-              space = Spaces.find(gameId: game._id, column: i, row: j + 1).fetch()[0]
-              chains.push(space.chainId)
+              chainId = getChainId(i, j+1, spacesList)
+              chains.push(chainId)
           if j - 1 >= 0
             if board[i][j - 1] is 's' #espacio conocido
-              space = Spaces.find(gameId: game._id, column: i, row: j - 1).fetch()[0]
-              chains.push(space.chainId)
+              chainId = getChainId(i, j-1, spacesList)
+              chains.push(chainId)
+
 
           #Comprobamos si hay mas de una cadena y las concatenamos
           if chains.length > 1
             x = 1
             while x < chains.length
-              Meteor.call "updateSpaceChain", chains[0], chains[x]
+              y = 0
+              while y < spacesList.length
+                if spacesList[y].chainId is chains[x]
+                  spacesList[y].chainId = chains[0]
+                y++
               x++
-            Meteor.call "newSpace", i, j, chains[0], game._id
+            space =
+              column: i
+              row: j
+              chainId: chains[0]
+              gameId: game._id
+            spacesList.push(space)
             board[i][j] = 's'
 
           if chains.length is 1
-            Meteor.call "newSpace", i, j, chains[0], game._id
+            space =
+              column: i
+              row: j
+              chainId: chains[0]
+              gameId: game._id
+            spacesList.push(space)
             board[i][j] = 's'
 
           if chains.length is 0
             chains[0] = generateUUID()
-            Meteor.call "newSpace", i, j, chains[0], game._id
+            space =
+              column: i
+              row: j
+              chainId: chains[0]
+              gameId: game._id
+            spacesList.push(space)
             board[i][j] = 's'
 
           chains = []
@@ -173,8 +222,7 @@ Meteor.methods
 
     #Segundo, comprobamos que rodea a las cadenas vacias, negras, blancas o mixtas
 
-    spaces = Spaces.find(gameId: game._id).fetch()
-    distinctSpaceChains = _.uniq(spaces, false, (d) ->
+    distinctSpaceChains = _.uniq(spacesList, false, (d) ->
       d.chainId
     )
     distinctValues = _.pluck(distinctSpaceChains, "chainId")
@@ -182,42 +230,40 @@ Meteor.methods
     blackPoints = 0
     whitePoints = 0
     for id in distinctValues
-      spaces = Spaces.find(chainId: id).fetch()
       white = false
       black = false
-      for space in spaces
-        if space.column - 1 >= 0
-          if board[space.column - 1][space.row] is 'w'
-            white = true
-          else if board[space.column - 1][space.row] is 'b'
-            black = true
-        if space.column + 1 <= 18
-          if board[space.column + 1][space.row] is 'w'
-            white = true
-          else if board[space.column + 1][space.row] is 'b'
-            black = true
-        if space.row - 1 >= 0
-          if board[space.column][space.row - 1] is 'w'
-            white = true
-          else if board[space.column][space.row - 1] is 'b'
-            black = true
-        if space.row + 1 <= 18
-          if board[space.column][space.row + 1] is 'w'
-            white = true
-          else if board[space.column][space.row + 1] is 'b'
-            black = true
-
-        #Si hemos encontrado los dos colores podemos dejar de buscar, no es territorio de nadie
-        if white and black
-          break
+      for space in spacesList
+        if space.chainId is id
+          if space.column - 1 >= 0
+            if board[space.column - 1][space.row] is 'w'
+              white = true
+            else if board[space.column - 1][space.row] is 'b'
+              black = true
+          if space.column + 1 <= 18
+            if board[space.column + 1][space.row] is 'w'
+              white = true
+            else if board[space.column + 1][space.row] is 'b'
+              black = true
+          if space.row - 1 >= 0
+            if board[space.column][space.row - 1] is 'w'
+              white = true
+            else if board[space.column][space.row - 1] is 'b'
+              black = true
+          if space.row + 1 <= 18
+            if board[space.column][space.row + 1] is 'w'
+              white = true
+            else if board[space.column][space.row + 1] is 'b'
+              black = true
       if white is true and black is false
-        for space in spaces
-          Meteor.call "addSpaceStone", space, 'w'
-          whitePoints += 1
+        for space in spacesList
+          if space.chainId is id
+            Meteor.call "addSpaceStone", space, 'w'
+            whitePoints += 1
       if white is false and black is true
-        for space in spaces
-          Meteor.call "addSpaceStone", space, 'b'
-          blackPoints += 1
+        for space in spacesList
+          if space.chainId is id
+            Meteor.call "addSpaceStone", space, 'b'
+            blackPoints += 1
 
 
 
@@ -227,6 +273,7 @@ Meteor.methods
       {
         $set:
           finalized: true
+          phase: "finalized"
         $inc:
           points1: blackPoints
           points2: whitePoints + 6.5
@@ -236,7 +283,7 @@ Meteor.methods
     winner = ""
     if game.points1 > game.points2
       winner = game.player1
-    else if game.points1 < game.points2
+    else
       winner = game.player2
 
     Games.update
@@ -244,9 +291,8 @@ Meteor.methods
       {
         $set:
           winner: winner
-      }    
-
-
+      }   
+    callback(err, result)
 
 #Auxiliares
 generateUUID = ->
@@ -257,3 +303,12 @@ generateUUID = ->
     ((if c is "x" then r else (r & 0x3 | 0x8))).toString 16
   )
   uuid
+
+getChainId = (column, row, list) ->
+  i = 0
+  chainId = ""
+  while i < list.length
+    if list[i].column is column and list[i].row is row
+      chainId = list[i].chainId
+    i++
+  chainId

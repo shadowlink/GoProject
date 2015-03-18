@@ -16,3 +16,6 @@ Template.newGame.events =
     game = Games.find(userId: user._id, finalized: false).fetch()[0]
     Router.go "game", _id: game._id
     return
+
+Template.newGame.rendered = ->
+    Session.set("currentRoomId", "newGame")

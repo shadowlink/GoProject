@@ -30,3 +30,9 @@ Meteor.publish "notifications", (userId) ->
 
 Meteor.publish "friends", ->
   Friends.find()
+
+Meteor.publish "userPresence", ->
+  filter = {}
+  Presences.find filter, fields:
+    state: true
+    userId: true

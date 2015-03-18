@@ -7,36 +7,37 @@ Template.chat.helpers
 
 Template.chat.events
   "click #btnChat": (event) ->
-    if e.charCode is 13 or e.charCode is 0
-      if Meteor.user()
-        user =  Meteor.user()
-        text = $("#chatText").val()
+    if Meteor.user()
+      user =  Meteor.user()
+      text = $("#chatText").val()
+      if text != ""
         Meteor.call "addLine", this._id, text, user.profile.Usuario
         $("#chatWell").scrollTop($("#chatWell")[0].scrollHeight)
         $("#chatText").val("")
-        return
+      return
 
   "keypress input": (e) ->
-    if e.charCode is 13 or e.charCode is 0
+    key = if e.charCode then e.charCode else if e.keyCode then e.keyCode else 0
+    if key is 13
       if Meteor.user()
         user =  Meteor.user()
         text = $("#chatText").val()
-        Meteor.call "addLine", this._id, text, user.profile.Usuario
-        $("#chatWell").scrollTop($("#chatWell")[0].scrollHeight)
-        $("#chatText").val("")
-        event.stopPropagation()
+        if text != ""
+          Meteor.call "addLine", this._id, text, user.profile.Usuario
+          $("#chatWell").scrollTop($("#chatWell")[0].scrollHeight)
+          $("#chatText").val("")
         return
 
 Template.chat.rendered = ->
   chat = Chats.find().fetch()
   window.addEventListener("resize", (e) => respondCanvas(e))
   $("#chatWell").scrollTop($("#chatWell")[0].scrollHeight)
-  $("#chatWell").height( $( window ).height() - 515 )
+  $("#chatWell").height( $( window ).height() - 595 )
 
   Deps.autorun ->
     chat = Chats.find().fetch()
     $("#chatWell").scrollTop($("#chatWell")[0].scrollHeight)
 
   respondCanvas = (e) ->
-    $("#chatWell").height( $( window ).height() - 515 )
+    $("#chatWell").height( $( window ).height() - 595 )
     return

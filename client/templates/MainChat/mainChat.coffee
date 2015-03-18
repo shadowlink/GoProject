@@ -17,7 +17,6 @@ Template.mainChat.events
       return
 
   "keypress input": (e) ->
-    console.log e.charCode
     key = if e.charCode then e.charCode else if e.keyCode then e.keyCode else 0
     if key is 13
       if Meteor.user()
@@ -37,6 +36,7 @@ Template.mainChat.events
 
 
 Template.mainChat.rendered = ->
+  Session.set("currentRoomId", "chat")
   chat = MainChatLines.find().fetch()
   window.addEventListener("resize", (e) => respondCanvas(e))
   $(".mainChatWell").height( $( window ).height() - 310 )

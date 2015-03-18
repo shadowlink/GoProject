@@ -49,6 +49,7 @@ Template.profile.helpers
 
 
 Template.profile.rendered = ->
+  Session.set("currentRoomId", "profile")
   window.addEventListener("resize", (e) => respondCanvas(e))
   $("#profile_list").height( $( window ).height() - 260 )
 

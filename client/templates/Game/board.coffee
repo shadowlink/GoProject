@@ -4,6 +4,7 @@ Template.board.helpers id: ->
   @_id
 
 Template.board.rendered = ->
+  audio = new Audio('/sound/stone_sound.wav')
   NUMBER_OF_COLS = 19
   NUMBER_OF_ROWS = 19
   canvas = document.getElementById(id)
@@ -101,11 +102,21 @@ Template.board.rendered = ->
     return
 
   drawStones = ->
+    game = Games.find(_id: id).fetch()[0]
     lastStone = null
     for stone in stones
       if stone.spaceStone is false
         ctx.drawImage img_black, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'b' and stone.validMove is true
         ctx.drawImage img_white, stone.row * BLOCK_SIZE, stone.column * BLOCK_SIZE, tamStone, tamStone if stone.stone is 'w' and stone.validMove is true
+        if stone.marked is true
+          posX = (stone.row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+          posY = (stone.column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+          ctx.beginPath()
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#f44336'
+          ctx.arc posX, posY, (tamStone / 2) - 8, 0, 2 * Math.PI, true
+          ctx.stroke()
+          ctx.lineWidth = 1;
       else
         if stone.stone is 'w'
           color = "white"
@@ -115,75 +126,96 @@ Template.board.rendered = ->
         posX = (stone.row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
         posY = (stone.column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
         ctx.beginPath()
-        ctx.arc posX, posY, tamStone / 2, 0, 2 * Math.PI, true
+        ctx.arc posX, posY, tamStone / 4, 0, 2 * Math.PI, true
         ctx.fillStyle = color
-        ctx.globalAlpha = 0.5
+        ctx.globalAlpha = 0.3
         ctx.lineWidth = 2
         ctx.strokeStyle = 'black'
         ctx.stroke()
         ctx.fill()
-        ctx.globalAlpha = 0.9
+        ctx.globalAlpha = 1.0
         ctx.lineWidth = 1
 
       lastStone = stone
     #Marcador de ultima piedra puesta
     if lastStone!=null 
-      posX = (lastStone.row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
-      posY = (lastStone.column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
-      ctx.beginPath()
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#A6172A'
-      ctx.arc posX, posY, (tamStone / 2) - 8, 0, 2 * Math.PI, true
-      ctx.stroke()
-      ctx.lineWidth = 1;
+      unless game.phase is "count"
+        posX = (lastStone.row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+        posY = (lastStone.column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+        ctx.beginPath()
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#f44336'
+        ctx.arc posX, posY, (tamStone / 2) - 8, 0, 2 * Math.PI, true
+        ctx.stroke()
+        ctx.lineWidth = 1;
 
     return
 
-  OnClick = (e) ->
-    #lastMove = Moves.find {gameId:id},
-    #            sort:
-    #                submitted: -1
-    #            limit: 1
-    #console.log lastMove.fetch()[0]._id
-
-    #Comprobamos si es nuestro turno
-    game = Games.find(_id: id).fetch()[0]
-    turn = game.turn
+  selectChains = (e) ->
     user = Meteor.user().profile.Usuario
+    cell = getCursorPosition(e)
+    #Determinamos el color de las piedras que podemos marcar
+    if user is game.player1
+      myStone = 'w'
+    else
+      myStone = 'b'
+    #Obtener la chainId de la pieza
+    stone = Stones.find(row:cell.Row, column: cell.Column, gameId: id).fetch()[0]
+    chainId = stone.chainId
+    #Comprobamos si es de nuestro color
+    if stone.stone is myStone
+      #Obtenemos la cadena
+      chain = Stones.find(chainId:chainId, gameId:id).fetch()
+      #Si ya estan marcadas las desmarcamos
+      if chain[0].marked is true
+        Meteor.call "unMarkChain", chainId, id
+      else
+        Meteor.call "markChain", chainId, id
 
-    if user is turn and game.finalized is false and game.player2 != ''
-      #Evitamos que se puedan poner piezas varias veces en el intervalo de procesamiento de jugadas del servidor
-      if blockMove is false
-        blockMove = true
-        cell = getCursorPosition(e)
+  OnClick = (e) ->
+    #Comprobamos si la partida ha acabado y estamos en fase de recuento
+    if game.phase is "count"
+      selectChains(e)
+    else
+      #Comprobamos si es nuestro turno
+      game = Games.find(_id: id).fetch()[0]
+      turn = game.turn
+      user = Meteor.user().profile.Usuario
 
-        #Determinamos el color de la piedra
-        if user is game.player1
-          myStone = 'b'
-        else
-          myStone = 'w'
+      if user is turn and game.finalized is false and game.player2 != ''
+        #Evitamos que se puedan poner piezas varias veces en el intervalo de procesamiento de jugadas del servidor
+        if blockMove is false
+          blockMove = true
+          cell = getCursorPosition(e)
 
-        move =
-          gameId: id
-          column: cell.Column
-          row: cell.Row
-          submitted: new Date().getTime()
-          stone: myStone
-          player: game.turn
-        Meteor.call "newMove", move, (err, result) ->
-          if err
-            console.log "No se puede enviar la jugada " + err.reason
+          #Determinamos el color de la piedra
+          if user is game.player1
+            myStone = 'b'
           else
-            if result
-              Meteor.call "changeTurn", game, false, (err, result) ->
-                if err
-                  console.log "Error al pasar el turno"
-                else
-                  blockMove = false
+            myStone = 'w'
+
+          move =
+            gameId: id
+            column: cell.Column
+            row: cell.Row
+            submitted: new Date().getTime()
+            stone: myStone
+            player: game.turn
+          Meteor.call "newMove", move, (err, result) ->
+            if err
+              console.log "No se puede enviar la jugada " + err.reason
             else
-              blockMove = false
-          return
-        draw()
+              if result
+                Meteor.call "changeTurn", game, false, (err, result) ->
+                  if err
+                    console.log "Error al pasar el turno"
+                  else
+                    blockMove = false
+              else
+                blockMove = false
+            return
+          draw()
+          audio.play()
       return
 
   mouseMove = (e) ->
@@ -191,28 +223,29 @@ Template.board.rendered = ->
     turn = game.turn
     user = Meteor.user().profile.Usuario
     if user is turn and game.finalized is false and blockMove is false
-      draw()
-      offset = $("#" + id).offset()
-      x = e.pageX - offset.left
-      y = e.pageY - offset.top
-      row = Math.floor(x / BLOCK_SIZE)
-      column = Math.floor(y / BLOCK_SIZE)
-      posX = (row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
-      posY = (column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
-      ctx.beginPath()
-      ctx.arc posX, posY, tamStone / 2, 0, 2 * Math.PI, true
-      if user is game.player1
-        ctx.fillStyle = "black"
-        ctx.globalAlpha = 0.5
-      else
-        ctx.fillStyle = "white"
-        ctx.globalAlpha = 0.9
-      ctx.lineWidth = 2
-      ctx.strokeStyle = 'black'
-      ctx.stroke()
-      ctx.fill()
-      ctx.globalAlpha = 1.0
-      ctx.lineWidth = 1
+      unless game.phase is "count"
+        draw()
+        offset = $("#" + id).offset()
+        x = e.pageX - offset.left
+        y = e.pageY - offset.top
+        row = Math.floor(x / BLOCK_SIZE)
+        column = Math.floor(y / BLOCK_SIZE)
+        posX = (row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+        posY = (column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
+        ctx.beginPath()
+        ctx.arc posX, posY, tamStone / 2, 0, 2 * Math.PI, true
+        if user is game.player1
+          ctx.fillStyle = "black"
+          ctx.globalAlpha = 0.5
+        else
+          ctx.fillStyle = "white"
+          ctx.globalAlpha = 0.9
+        ctx.lineWidth = 2
+        ctx.strokeStyle = 'black'
+        ctx.stroke()
+        ctx.fill()
+        ctx.globalAlpha = 1.0
+        ctx.lineWidth = 1
     return
 
   getCursorPosition = (e) ->

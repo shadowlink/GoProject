@@ -58,6 +58,8 @@ Template.header.helpers
     return myTurn
 
 Template.header.rendered = ->
+  Presence.state = ->
+    { currentRoomId: Session.get('currentRoomId')}
   subs = new SubsManager();
   $('.button-collapse').sideNav()
   Deps.autorun ->
