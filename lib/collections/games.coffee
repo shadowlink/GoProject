@@ -1,5 +1,8 @@
 # Declaración de la coleccion Partidas
 @Games = new Meteor.Collection "games"
+
+Games.initEasySearch "name"
+
 Games.allow
   update: (userId, game) ->
     ownsDocument userId, game
@@ -128,9 +131,8 @@ Meteor.methods
           $set:
             confirmPlayer2: true
         }  
-
- Meteor.syncMethods
-  finalizeGame: (game, callback) ->
+        
+  finalizeGame: (game) ->
     #Recuento final de territorios
     #Primero creamos una lista de cadenas de espacios vacios
     #Para ello primero necesitamos un mapa del estado del tablero
@@ -292,7 +294,6 @@ Meteor.methods
         $set:
           winner: winner
       }   
-    callback(err, result)
 
 #Auxiliares
 generateUUID = ->
