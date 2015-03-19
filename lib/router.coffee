@@ -4,8 +4,19 @@ Router.configure
   subs = new SubsManager()
 
 Router.map ->
-  @route "topList",
+  @route "main",
     path: "/"
+    onBeforeAction: (pause) ->
+      if Meteor.user()
+        if !Meteor.user().profile.Usuario
+          Router.go "asigName"
+        else
+          this.next()
+      else
+        this.next()
+        
+  @route "topList",
+    path: "/topList"
     waitOn: ->
       subs.subscribe "allGames"
       subs.subscribe "allStones"
@@ -30,7 +41,7 @@ Router.map ->
           this.next()
       else
         this.next()
-        
+
   @route "asigName",
       path: "/asigName"
       fastRender: true
@@ -54,7 +65,7 @@ Router.map ->
           this.next()
       else
         this.next()
-        
+
   @route "login",
     path: "/login"
     fastRender: true
@@ -88,7 +99,7 @@ Router.map ->
           this.next()
       else
         this.next()
-        
+
   @route "mainChat",
     path: "/mainChat"
     waitOn: ->
@@ -104,6 +115,5 @@ Router.map ->
           this.next()
       else
         this.next()
-        
-  return
 
+  return
