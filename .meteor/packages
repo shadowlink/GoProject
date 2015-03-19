@@ -26,5 +26,9 @@ meteorhacks:fast-render
 msavin:mongol
 usefulio:sync-methods
 tmeasday:presence
-meteorhacks:kadira
 matteodem:easy-search
+meteorhacks:npm
+meteorhacks:kadira@2.20.1
+
+
+npm-container

@@ -113,7 +113,7 @@ Meteor.methods
       {
         $set:
           phase: phase
-      }    
+      }
 
   confirm: (game, user) ->
     game = Games.find(_id: game._id).fetch()[0]
@@ -123,15 +123,15 @@ Meteor.methods
         {
           $set:
             confirmPlayer1: true
-        }  
+        }
     else
       Games.update
         _id: game._id,
         {
           $set:
             confirmPlayer2: true
-        }  
-        
+        }
+
   finalizeGame: (game) ->
     #Recuento final de territorios
     #Primero creamos una lista de cadenas de espacios vacios
@@ -281,21 +281,73 @@ Meteor.methods
           points2: whitePoints + 6.5
       }
 
-    #Comprobamos quien ha ganado y actualizamos el ganador 
+    #Comprobamos quien ha ganado y realizamos los cálculos de GOR
+    game = Games.find(_id:game._id).fetch()[0]
+    updateELORatings(game)
+
+
+#Auxiliares
+updateELORatings = (game) ->
+    Elo = Meteor.npmRequire('arpad')
+    uscf =
+      default: 32
+      2100: 24
+      2400: 16
+
+    elo = new Elo(uscf, 100)
+
+    #Comprobamos quien ha ganado
     winner = ""
     if game.points1 > game.points2
       winner = game.player1
     else
       winner = game.player2
 
+    #Obtenemos el GOR previo de cada jugador
+    p1 = Users.find(_id:game.player1Id).fetch()[0]
+    p2 = Users.find(_id:game.player2Id).fetch()[0]
+
+    GOR1 = p1.profile.GOR
+    GOR2 = p2.profile.GOR
+
+    if GOR1 is undefined
+      GOR1 = 100
+    if GOR2 is undefined
+      GOR2 = 100
+
+    newP1 = 0
+    newP1 = 0
+    if game.points1>game.points2
+      newP1 = elo.newRatingIfWon(GOR1, GOR2)
+      newP2 = elo.newRatingIfLost(GOR2, GOR1)
+    else if game.points1<game.points2
+      newP1 = elo.newRatingIfLost(GOR1, GOR2)
+      newP2 = elo.newRatingIfWon(GOR2, GOR1)
+    else if game.points1 is game.points2
+      newP1 = elo.newRatingIfTied(GOR1, GOR2)
+      newP2 = elo.newRatingIfTied(GOR2, GOR1)
+
+    Users.update
+      _id: p1._id,
+      {
+        $set:
+          "profile.GOR": newP1
+      }
+
+    Users.update
+      _id: p2._id,
+      {
+        $set:
+          "profile.GOR": newP2
+      }
+
     Games.update
       _id: game._id,
       {
         $set:
           winner: winner
-      }   
+      }
 
-#Auxiliares
 generateUUID = ->
   d = new Date().getTime()
   uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) ->
