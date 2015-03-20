@@ -288,14 +288,6 @@ Meteor.methods
 
 #Auxiliares
 updateELORatings = (game) ->
-    Elo = Meteor.npmRequire('arpad')
-    uscf =
-      default: 32
-      2100: 24
-      2400: 16
-
-    elo = new Elo(uscf, 100)
-
     #Comprobamos quien ha ganado
     winner = ""
     if game.points1 > game.points2
@@ -318,14 +310,14 @@ updateELORatings = (game) ->
     newP1 = 0
     newP1 = 0
     if game.points1>game.points2
-      newP1 = elo.newRatingIfWon(GOR1, GOR2)
-      newP2 = elo.newRatingIfLost(GOR2, GOR1)
+      newP1 = newRatingIfWon(GOR1, GOR2)
+      newP2 = newRatingIfLost(GOR2, GOR1)
     else if game.points1<game.points2
-      newP1 = elo.newRatingIfLost(GOR1, GOR2)
-      newP2 = elo.newRatingIfWon(GOR2, GOR1)
+      newP1 = newRatingIfLost(GOR1, GOR2)
+      newP2 = newRatingIfWon(GOR2, GOR1)
     else if game.points1 is game.points2
-      newP1 = elo.newRatingIfTied(GOR1, GOR2)
-      newP2 = elo.newRatingIfTied(GOR2, GOR1)
+      newP1 = newRatingIfTied(GOR1, GOR2)
+      newP2 = newRatingIfTied(GOR2, GOR1)
 
     Users.update
       _id: p1._id,
@@ -365,3 +357,34 @@ getChainId = (column, row, list) ->
       chainId = list[i].chainId
     i++
   chainId
+
+#ELO
+
+newRatingIfWon = (rating, opponent_rating) ->
+  odds = expectedScore(rating, opponent_rating)
+  newRating odds, 1, rating
+
+newRatingIfLost = (rating, opponent_rating) ->
+  odds = expectedScore(rating, opponent_rating)
+  newRating odds, 0, rating
+
+newRatingIfTied = (rating, opponent_rating) ->
+  odds = expectedScore(rating, opponent_rating)
+  newRating odds, 0.5, rating
+
+newRating = (expected_score, actual_score, previous_rating) ->
+  difference = actual_score - expected_score
+  rating = Math.round(previous_rating + getKFactor(previous_rating) * difference)
+  if rating < -Infinity
+    rating = -Infinity
+  else if rating > Infinity
+    rating = Infinity
+  rating
+
+getKFactor = (rating) ->
+  k_factor = 32
+  k_factor
+
+expectedScore = (rating, opponent_rating) ->
+  difference = opponent_rating - rating
+  1 / (1 + 10 ** (difference / 400))
