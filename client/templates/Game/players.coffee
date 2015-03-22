@@ -176,7 +176,7 @@ Template.players.rendered = ->
       else
         startTime.setTime(previousTimestamp)
 
-      startTime.setMilliseconds(startTime.getMilliseconds() + (20 * 60 * 1000) - playerTime)
+      startTime.setMilliseconds(startTime.getMilliseconds() + (game[0].time * 60 * 1000) - playerTime)
 
       #Activamos el contador del jugador que corresponda
       if game[0].turn is game[0].player1

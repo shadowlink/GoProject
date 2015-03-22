@@ -18,7 +18,10 @@ Meteor.methods
     user = Meteor.user()
     throw new Meteor.Error(401, "Tienes que loguearte primero")  unless user
     throw new Meteor.Error(422, "Falta el nombre!")  unless newGame.name
-    game = _.extend(_.pick(newGame, "name"),
+    throw new Meteor.Error(422, "Falta el tipo de tablero!")  unless newGame.boardType
+    throw new Meteor.Error(422, "Falta el tiempo!")  unless newGame.time
+    throw new Meteor.Error(422, "Falta el komi!")  unless newGame.komi
+    game = _.extend(_.pick(newGame, "name", "boardType", "komi", "time"),
       userId: user._id
       author: user.profile.Usuario
       player1: user.profile.Usuario
@@ -366,7 +369,7 @@ Meteor.methods
           phase: "finalized"
         $inc:
           points1: blackPoints
-          points2: whitePoints + 6.5
+          points2: whitePoints + parseFloat(game.komi)
       }
 
     #Comprobamos quien ha ganado y realizamos los cálculos de GOR

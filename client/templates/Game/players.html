@@ -4,7 +4,7 @@
             <div class="card  blue-grey">
               <i class="left">{{> avatar shape = "rounded" user=player1User size="medium"}}</i>
               <a href="{{pathFor 'profile' _id = player1Id}}">{{player1}}</a><span class="teal-text text-lighten-4 right">{{points1}} ptos</span>
-              <h6 class="white-text" id="timer1">20 : 00</h6>
+              <h6 class="white-text" id="timer1"> Tiempo </h6>
             </div>
         </div>
         {{#if player2}}
@@ -12,7 +12,7 @@
               <div class="card  blue-grey">
                 <i class="left">{{> avatar shape = "rounded" user=player2User size="medium"}}</i>
                 <a href="{{pathFor 'profile' _id = player1Id}}">{{player2}}</a><span class="teal-text text-lighten-4 right">{{points2}} ptos</span>
-                <h6 class="white-text" id="timer2">20 : 00</h6>
+                <h6 class="white-text" id="timer2">Tiempo</h6>
               </div>
             </div>
         {{/if}}

@@ -7,8 +7,14 @@ Template.newGame.events =
     game = Games.find(userId: user._id, finalized: false).count()
 
     if game is 0
+      komi = $("#komi").val()
+      if komi is ""
+        komi = 6.5
       newGame =
         name: $("#nombre").val()
+        time: $("#time").val()
+        boardType: $('input:radio[name=boardType]:checked').val()
+        komi: komi
       Meteor.call "AddGame", newGame, (err, result) ->
         alert "No se puede crear la partida " + err.reason  if err
         return
