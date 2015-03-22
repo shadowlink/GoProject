@@ -5,6 +5,30 @@ Template.friendlist.helpers
   invitations: ->
   	Friends.find accepted: false, "receiver._id": Meteor.user()._id
 
+  playing: ->
+    playing = Games.find(player1Id:this.receiver._id, finalized:false).count() + Games.find(player2Id:this.receiver._id, finalized:false).count()
+    if playing > 0
+      return true
+    else
+      return false
+
+  gameUrl: ->
+    gameid = ""
+    user = this.receiver
+    game = Games.find(player1: user.profile.Usuario, finalized: false).count()
+    if game is 0
+      game = Games.find(player2: user.profile.Usuario, finalized: false).count()
+      if game is 0
+        gameid = ""
+      else
+        gameid = Games.find(player2: user.profile.Usuario, finalized: false).fetch()[0]._id
+    else
+      gameid = Games.find(player1: user.profile.Usuario, finalized: false).fetch()[0]._id
+    return gameid
+
+  isOnline: ->
+    user = Users.find(_id:this.receiver._id).fetch()[0]
+    return user.status.online
 
 Template.friendlist.events
 	"click .acceptInvite": (e) ->
@@ -16,6 +40,6 @@ Template.friendlist.events
 		Meteor.call "cancelFriend", this._id
 
 Template.friendlist.rendered = ->
-	Session.set("currentRoomId", "friendList")	
+	Session.set("currentRoomId", "friendList")
 	Deps.autorun ->
 		$('.tooltipped').tooltip({delay: 50});

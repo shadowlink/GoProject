@@ -32,12 +32,12 @@ Template.chat.rendered = ->
   chat = Chats.find().fetch()
   window.addEventListener("resize", (e) => respondCanvas(e))
   $("#chatWell").scrollTop($("#chatWell")[0].scrollHeight)
-  $("#chatWell").height( $( window ).height() - 595 )
+  $("#chatWell").height( $( window ).height() - 550 )
 
   Deps.autorun ->
     chat = Chats.find().fetch()
     $("#chatWell").scrollTop($("#chatWell")[0].scrollHeight)
 
   respondCanvas = (e) ->
-    $("#chatWell").height( $( window ).height() - 595 )
+    $("#chatWell").height( $( window ).height() - 550 )
     return

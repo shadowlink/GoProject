@@ -14,7 +14,7 @@ Router.map ->
           this.next()
       else
         this.next()
-        
+
   @route "topList",
     path: "/topList"
     waitOn: ->
@@ -74,6 +74,8 @@ Router.map ->
     path: "/friendlist"
     waitOn: ->
       subs.subscribe "friends"
+      subs.subscribe "allGames"
+      subs.subscribe "users"
     fastRender: true
 
   @route "profile",

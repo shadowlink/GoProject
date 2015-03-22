@@ -1,10 +1,17 @@
 <template name="gameList">
     <div class="section">
     	<div class = "row">
-			<div class="input-field col s12">
-				<input id="gameName" type="text" class="form-control">
-				<label for="name">Nombre de la partida</label>
-			</div>
+  			<div class="input-field col s9">
+  				<input id="gameName" type="text" class="form-control">
+  				<label for="name">Nombre de la partida</label>
+  			</div>
+        <div class="input-field col s3">
+            <input type="checkbox" id="freeGames" />
+            <label for="freeGames">Libres</label>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="checkbox" id="playingGames" />
+            <label for="playingGames">Jugando</label>
+        </div>
     	</div>
     	<div class = "row">
 	        {{#each games}}

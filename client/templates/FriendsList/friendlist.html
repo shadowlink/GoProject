@@ -4,8 +4,8 @@
 	    <div class = "row">
 	        {{#each invitations}}
 		        <div class="col s2">
-		            <div class="card-panel   blue-grey darken-2 valign-wrapper">
-		                <i class="left valign">{{> avatar shape = "circle" user=this.sender size="small"}}</i>
+		            <div class="card   blue-grey darken-2 valign-wrapper">
+		                <i class="left valign">{{> avatar shape = "rounded" user=this.sender size="small"}}</i>
 		                <h6 class="valign white-text">{{sender.profile.Usuario}}</h6> &nbsp;&nbsp;&nbsp;
 			        	<a href="#!" class="secondary-content tooltipped acceptInvite" data-position="bottom" data-delay="50" data-tooltip="Aceptar"><i class="mdi-navigation-check green-text text-lighten-3"></i></a>
 			        	<a href="#!" class="secondary-content tooltipped cancelInvite" data-position="bottom" data-delay="50" data-tooltip="Cancelar"><i class="mdi-navigation-cancel red-text text-lighten-3"></i></a>
@@ -18,9 +18,17 @@
     	<div class = "row">
 	        {{#each friends}}
 		        <div class="col s2">
-		            <div class="card-panel  blue-grey valign-wrapper">
-		                <i class="left valign">{{> avatar shape = "circle" user=this.receiver size="small"}}</i>
-		                <h6 class="valign white-text">{{receiver.profile.Usuario}}</h6> &nbsp;&nbsp;&nbsp;
+		            <div class="card  blue-grey valign-wrapper">
+		                <i class="left valign">{{> avatar shape = "rounded" user=this.receiver size="small"}}</i>
+                    <a href="{{pathFor 'profile' _id = this.receiver._id}}"><h6 class="valign white-text">{{receiver.profile.Usuario}}</h6></a>
+                    {{#if playing}}
+                      <a href="{{pathFor 'game' _id = gameUrl}}"><i class="tooltipped orange-text text-lighten-1 mdi-action-visibility" data-position="bottom" data-delay="50" data-tooltip="Ver partida"></i></a>
+                    {{/if}}
+                    {{#if isOnline}}
+                      <a href="#!" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Online"><i class="green-text mdi-av-stop"></i></a>
+                    {{else}}
+                      <a href="#!" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Offline"><i class="red-text mdi-av-stop"></i></a>
+                    {{/if}}
 		            </div>
 		        </div>
 	        {{/each}}
