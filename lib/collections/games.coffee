@@ -25,11 +25,15 @@ Meteor.methods
       player2: ""
       player1Id: user._id
       player2Id: ""
+      player1Timestamp: 0
+      player2Timestamp: 0
+      player1TimeConsumed: 0
+      player2TimeConsumed: 0
       turn: user.profile.Usuario
       points1: 0
       points2: 0
       pass: 0
-      phase: "play"
+      phase: "waiting"
       finalized: false
       surrender: ""
       confirmPlayer1:false
@@ -45,6 +49,8 @@ Meteor.methods
         $set:
           player2: user.profile.Usuario
           player2Id: user._id
+          phase: "play"
+          gameStartAt: new Date().getTime()
       }
 
   changeTurn: (game, pass) ->
@@ -54,22 +60,68 @@ Meteor.methods
     else
       newTurn = game.player1
 
+    nowTime = new Date().getTime()
+
     if pass
-      Games.update
-        _id: game._id,
-        {
-          $set:
-            turn: newTurn
-          $inc:
-            pass: 1
-        }
+      if newTurn is game.player2
+        offset = game.player2Timestamp.valueOf()
+        if offset is 0
+          offset = game.gameStartAt.valueOf()
+        incTime = nowTime.valueOf() - offset
+        Games.update
+          _id: game._id,
+          {
+            $set:
+              turn: newTurn
+              player1Timestamp: nowTime
+            $inc:
+              player1TimeConsumed: incTime
+              pass: 1
+          }
+      else if newTurn is game.player1
+        offset = game.player1Timestamp.valueOf()
+        if offset is 0
+          offset = game.gameStartAt.valueOf()
+        incTime = nowTime.valueOf() - offset
+        Games.update
+          _id: game._id,
+          {
+            $set:
+              turn: newTurn
+              player2Timestamp: nowTime
+            $inc:
+              player2TimeConsumed: incTime
+              pass: 1
+          }
     else
-      Games.update
-        _id: game._id,
-        {
-          $set:
-            turn: newTurn
-        }
+      if newTurn is game.player2
+        offset = game.player2Timestamp.valueOf()
+        if offset is 0
+          offset = game.gameStartAt.valueOf()
+        incTime = nowTime.valueOf() - offset
+        Games.update
+          _id: game._id,
+          {
+            $set:
+              turn: newTurn
+              player1Timestamp: nowTime
+            $inc:
+              player1TimeConsumed: incTime
+          }
+      else if newTurn is game.player1
+        offset = game.player1Timestamp.valueOf()
+        if offset is 0
+          offset = game.gameStartAt.valueOf()
+        incTime = nowTime.valueOf() - offset
+        Games.update
+          _id: game._id,
+          {
+            $set:
+              turn: newTurn
+              player2Timestamp: nowTime
+            $inc:
+              player2TimeConsumed: incTime
+          }
 
   passReset: (gameId) ->
     Games.update
@@ -97,6 +149,42 @@ Meteor.methods
         }
 
   surrenderGame: (looser, winner,  game) ->
+    #Obtenemos el GOR previo de cada jugador
+    p1 = Users.find(_id:game.player1Id).fetch()[0]
+    p2 = Users.find(_id:game.player2Id).fetch()[0]
+
+    GOR1 = p1.profile.GOR
+    GOR2 = p2.profile.GOR
+
+    if GOR1 is undefined
+      GOR1 = 100
+    if GOR2 is undefined
+      GOR2 = 100
+
+    newP1 = 0
+    newP1 = 0
+
+    if winner is game.player1
+      newP1 = newRatingIfWon(GOR1, GOR2)
+      newP2 = newRatingIfLost(GOR2, GOR1)
+    else if winner is game.player2
+      newP1 = newRatingIfLost(GOR1, GOR2)
+      newP2 = newRatingIfWon(GOR2, GOR1)
+
+    Users.update
+      _id: p1._id,
+      {
+        $set:
+          "profile.GOR": newP1
+      }
+
+    Users.update
+      _id: p2._id,
+      {
+        $set:
+          "profile.GOR": newP2
+      }
+
     Games.update
       _id: game._id,
       {

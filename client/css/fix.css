@@ -41,10 +41,6 @@
 
 }
 
-.gameItemHeader {
-
-}
-
 hr.soften {
     height: 1px;
     background-image: -webkit-linear-gradient(left, rgba(239, 83, 80, 0), rgba(239, 83, 80, .8), rgba(239, 83, 80, 0));
@@ -70,4 +66,3 @@ hr.soften {
     height: 1000px;
     overflow-y: auto;
 }
-

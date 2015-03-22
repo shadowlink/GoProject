@@ -142,3 +142,58 @@ Template.players.events
     else
       Meteor.call "confirm", this, user
       return
+
+Template.players.rendered = ->
+  timerP1 = 0
+  timerP2 = 0
+  game = Games.find().fetch()
+  Deps.autorun ->
+    game = Games.find(finalized:false).fetch()
+    countdown.setLabels ' milissegundo| | | hora| dia| semana| mes| año| década| século| milênio', ' milissegundos| | | horas| dias| semanas| meses| años| décadas| séculos| milênios', ' : ', ' + ', 'ahora'
+    #Nos aseguramos de que estamos en la fase de juego
+    #Tenemos que parar el contador del jugador que no este jugando
+    window.clearInterval timerP2
+    window.clearInterval timerP1
+
+    if game[0].phase is "play"
+      gameStartAt = game[0].gameStartAt
+      #Tenemos que obtener la diferencia de timestamp del jugador que tenga el turno
+      if game[0].player1 is game[0].turn
+        playerTime = game[0].player1TimeConsumed
+      else
+        playerTime = game[0].player2TimeConsumed
+
+      #Obtenemos el tiempo desde transcurrido desde que el jugador tiene el turno
+      previousTimestamp = 0
+      if game[0].turn is game[0].player1
+        previousTimestamp = game[0].player2Timestamp
+      else
+        previousTimestamp = game[0].player1Timestamp
+
+      startTime = new Date
+      if previousTimestamp is 0
+        startTime = new Date
+      else
+        startTime.setTime(previousTimestamp)
+
+      startTime.setMilliseconds(startTime.getMilliseconds() + (20 * 60 * 1000) - playerTime)
+
+      #Activamos el contador del jugador que corresponda
+      if game[0].turn is game[0].player1
+        timerP1 = countdown(startTime, ((ts) ->
+          if startTime < new Date
+            document.getElementById('timer1').innerHTML = "00 : 00"
+            Meteor.call "surrenderGame", game[0].player1, game[0].player2, game[0]
+          else
+            document.getElementById('timer1').innerHTML = ts.toHTML('strong')
+          return
+        ), countdown.MINUTES | countdown.SECONDS)
+      else
+        timerP2 = countdown(startTime, ((ts) ->
+          if startTime < new Date
+            document.getElementById('timer2').innerHTML = ts.toHTML('00 : 00')
+            Meteor.call "surrenderGame", game[0].player2, game[0].player1, game[0]
+          else
+            document.getElementById('timer2').innerHTML = ts.toHTML('strong')
+          return
+        ), countdown.MINUTES | countdown.SECONDS)

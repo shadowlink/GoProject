@@ -138,7 +138,7 @@ Template.board.rendered = ->
 
       lastStone = stone
     #Marcador de ultima piedra puesta
-    if lastStone!=null 
+    if lastStone!=null
       unless game.phase is "count"
         posX = (lastStone.row * BLOCK_SIZE) + (BLOCK_SIZE / 2)
         posY = (lastStone.column * BLOCK_SIZE) + (BLOCK_SIZE / 2)
@@ -276,5 +276,3 @@ Template.board.rendered = ->
     draw()
 
 return
-
-

@@ -1,19 +1,19 @@
 <template name="players">
     <div class="row">
         <div class="col s6">
-            <div class="card-panel  blue-grey valign-wrapper">
-                <i class="left valign">{{> avatar shape = "circle" user=player1User size="medium"}}</i>
-                <a href="{{pathFor 'profile' _id = player1Id}}"><h5 class="valign white-text">{{player1}}</h5></a> &nbsp;&nbsp;&nbsp;
-                <h5 class="secondary-content valign right-align teal-text text-lighten-3">{{points1}}</h5>
+            <div class="card  blue-grey">
+              <i class="left">{{> avatar shape = "rounded" user=player1User size="medium"}}</i>
+              <a href="{{pathFor 'profile' _id = player1Id}}">{{player1}}</a><span class="teal-text text-lighten-4 right">{{points1}} ptos</span>
+              <h6 class="white-text" id="timer1">20 : 00</h6>
             </div>
         </div>
         {{#if player2}}
             <div class="col s6">
-                <div class="card-panel blue-grey valign-wrapper">
-                    <i class="left">{{> avatar shape = "circle" user=player2User size="medium"}}</i>
-                    <a href="{{pathFor 'profile' _id = player2Id}}"><h5 class="valign white-text">{{player2}}</h5></a> &nbsp;&nbsp;&nbsp;
-                    <h5 class="secondary-content valign right-align teal-text text-lighten-3">{{points2}}</h5>
-                </div>
+              <div class="card  blue-grey">
+                <i class="left">{{> avatar shape = "rounded" user=player2User size="medium"}}</i>
+                <a href="{{pathFor 'profile' _id = player1Id}}">{{player2}}</a><span class="teal-text text-lighten-4 right">{{points2}} ptos</span>
+                <h6 class="white-text" id="timer2">20 : 00</h6>
+              </div>
             </div>
         {{/if}}
     </div>
