@@ -227,17 +227,26 @@ Meteor.methods
     #Recuento final de territorios
     #Primero creamos una lista de cadenas de espacios vacios
     #Para ello primero necesitamos un mapa del estado del tablero
+    if game.boardType is "19x19"
+      NUMBER_OF_COLS = 19
+      NUMBER_OF_ROWS = 19
+    else if game.boardType is "13x13"
+      NUMBER_OF_COLS = 13
+      NUMBER_OF_ROWS = 13
+    else if game.boardType is "9x9"
+      NUMBER_OF_COLS = 9
+      NUMBER_OF_ROWS = 9
     stones = Stones.find(gameId: game._id, marked:false).fetch()
-    board = new Array(19)
+    board = new Array(NUMBER_OF_COLS)
     i = 0
-    while i < 19
-      board[i] = new Array(19)
+    while i < NUMBER_OF_COLS
+      board[i] = new Array(NUMBER_OF_ROWS)
       i++
 
     i = 0
-    while i < 19
+    while i < NUMBER_OF_COLS
       j = 0
-      while j < 19
+      while j < NUMBER_OF_ROWS
         board[i][j] = 'e'
         j++
       i++
@@ -248,9 +257,9 @@ Meteor.methods
     chains = []
     spacesList = []
     i = 0
-    while i < 19
+    while i < NUMBER_OF_COLS
       j = 0
-      while j < 19
+      while j < NUMBER_OF_ROWS
         if board[i][j] is 'e'
           #Comprobamos si hay cadenas adyacentes ya creadas
           if i - 1 >= 0
@@ -258,11 +267,11 @@ Meteor.methods
               #Recuperamos la id de cadena de ese espacio
               chainId = getChainId(i-1, j, spacesList)
               chains.push(chainId)
-          if i + 1 <= 18
+          if i + 1 <= NUMBER_OF_COLS-1
             if board[i + 1][j] is 's' #espacio conocido
               chainId = getChainId(i+1, j, spacesList)
               chains.push(chainId)
-          if j + 1 <= 18
+          if j + 1 <= NUMBER_OF_COLS-1
             if board[i][j + 1] is 's' #espacio conocido
               chainId = getChainId(i, j+1, spacesList)
               chains.push(chainId)
@@ -332,7 +341,7 @@ Meteor.methods
               white = true
             else if board[space.column - 1][space.row] is 'b'
               black = true
-          if space.column + 1 <= 18
+          if space.column + 1 <= NUMBER_OF_COLS-1
             if board[space.column + 1][space.row] is 'w'
               white = true
             else if board[space.column + 1][space.row] is 'b'
@@ -342,7 +351,7 @@ Meteor.methods
               white = true
             else if board[space.column][space.row - 1] is 'b'
               black = true
-          if space.row + 1 <= 18
+          if space.row + 1 <= NUMBER_OF_COLS-1
             if board[space.column][space.row + 1] is 'w'
               white = true
             else if board[space.column][space.row + 1] is 'b'

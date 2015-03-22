@@ -5,8 +5,16 @@ Template.board.helpers id: ->
 
 Template.board.rendered = ->
   audio = new Audio('/sound/stone_sound.wav')
-  NUMBER_OF_COLS = 19
-  NUMBER_OF_ROWS = 19
+  game = Games.find(_id: id).fetch()[0]
+  if game.boardType is "19x19"
+    NUMBER_OF_COLS = 19
+    NUMBER_OF_ROWS = 19
+  else if game.boardType is "13x13"
+    NUMBER_OF_COLS = 13
+    NUMBER_OF_ROWS = 13
+  else if game.boardType is "9x9"
+    NUMBER_OF_COLS = 9
+    NUMBER_OF_ROWS = 9
   canvas = document.getElementById(id)
   ctx = canvas.getContext("2d")
   $("#main").width( $( window ).height() - 120)
@@ -17,7 +25,6 @@ Template.board.rendered = ->
   BLOCK_SIZE = $(container).width() / NUMBER_OF_ROWS
   canvas.setAttribute("height", BLOCK_SIZE * NUMBER_OF_ROWS)
   stones = Stones.find(gameId: id).fetch()
-  game = Games.find(_id: id).fetch()[0]
   blockMove = false
   h = BLOCK_SIZE * NUMBER_OF_ROWS
   w = parseInt($(container).width())
@@ -73,32 +80,63 @@ Template.board.rendered = ->
     #Pintamos los Hoshi y el Tengen
     ctx.beginPath()
     ctx.fillStyle = "#000000"
-    ctx.arc (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
-    ctx.fill()
-    ctx.beginPath()
-    ctx.arc (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
-    ctx.fill()
-    ctx.beginPath()
-    ctx.arc (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
-    ctx.fill()
-    ctx.beginPath()
-    ctx.arc (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
-    ctx.fill()
-    ctx.beginPath()
-    ctx.arc (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
-    ctx.fill()
-    ctx.beginPath()
-    ctx.arc (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
-    ctx.fill()
-    ctx.beginPath()
-    ctx.arc (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
-    ctx.fill()
-    ctx.beginPath()
-    ctx.arc (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
-    ctx.fill()
-    ctx.beginPath()
-    ctx.arc (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
-    ctx.fill()
+    if game.boardType is "19x19"
+      ctx.arc (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, (15 * BLOCK_SIZE) + BLOCK_SIZE / 2, 5, 0, 2 * Math.PI, true
+      ctx.fill()
+    else if game.boardType is "13x13"
+      ctx.arc (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, 7, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, 7, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (6 * BLOCK_SIZE) + BLOCK_SIZE / 2, (6 * BLOCK_SIZE) + BLOCK_SIZE / 2, 7, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (3 * BLOCK_SIZE) + BLOCK_SIZE / 2, (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, 7, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, (9 * BLOCK_SIZE) + BLOCK_SIZE / 2, 7, 0, 2 * Math.PI, true
+      ctx.fill()
+    else if game.boardType is "9x9"
+      ctx.arc (2 * BLOCK_SIZE) + BLOCK_SIZE / 2, (2 * BLOCK_SIZE) + BLOCK_SIZE / 2, 10, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (2 * BLOCK_SIZE) + BLOCK_SIZE / 2, (6 * BLOCK_SIZE) + BLOCK_SIZE / 2, 10, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (4 * BLOCK_SIZE) + BLOCK_SIZE / 2, (4 * BLOCK_SIZE) + BLOCK_SIZE / 2, 10, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (6 * BLOCK_SIZE) + BLOCK_SIZE / 2, (2 * BLOCK_SIZE) + BLOCK_SIZE / 2, 10, 0, 2 * Math.PI, true
+      ctx.fill()
+      ctx.beginPath()
+      ctx.arc (6 * BLOCK_SIZE) + BLOCK_SIZE / 2, (6 * BLOCK_SIZE) + BLOCK_SIZE / 2, 10, 0, 2 * Math.PI, true
+      ctx.fill()
     return
 
   drawStones = ->

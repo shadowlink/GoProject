@@ -12,7 +12,16 @@ Meteor.methods
   newMove: (move) ->
     validMove = true
     remove = true
-
+    game = Games.find(_id:move.gameId).fetch()[0]
+    if game.boardType is "19x19"
+      NUMBER_OF_COLS = 19
+      NUMBER_OF_ROWS = 19
+    else if game.boardType is "13x13"
+      NUMBER_OF_COLS = 13
+      NUMBER_OF_ROWS = 13
+    else if game.boardType is "9x9"
+      NUMBER_OF_COLS = 9
+      NUMBER_OF_ROWS = 9
     #Comprobamos que no haya una pieza en la misma posicion
     myStone = Stones.find(gameId: move.gameId, row: move.row, column: move.column).count()
     if myStone > 0
@@ -78,16 +87,16 @@ Meteor.methods
 
       totalStones = Stones.find(gameId: move.gameId).fetch()
       #Crear un mapa en memoria con las posiciones de las piedras en el tablero
-      board = new Array(19)
+      board = new Array(NUMBER_OF_COLS)
       i = 0
-      while i < 19
-        board[i] = new Array(19)
+      while i < NUMBER_OF_COLS
+        board[i] = new Array(NUMBER_OF_ROWS)
         i++
 
       i = 0
-      while i < 19
+      while i < NUMBER_OF_COLS
         j = 0
-        while j < 19
+        while j < NUMBER_OF_ROWS
           board[i][j] = 'e'
           j++
         i++
@@ -107,12 +116,12 @@ Meteor.methods
             else
               unless board[stone.column][stone.row - 1] is 'e'
                 freedoms -= 1
-            if stone.row + 1 > 18
+            if stone.row + 1 > NUMBER_OF_COLS-1
               freedoms -= 1
             else
               unless board[stone.column][stone.row + 1] is 'e'
                 freedoms -= 1
-            if stone.column + 1 > 18
+            if stone.column + 1 > NUMBER_OF_COLS-1
               freedoms -= 1
             else
               unless board[stone.column + 1][stone.row] is 'e'
@@ -149,12 +158,12 @@ Meteor.methods
           else
             unless board[stone.column][stone.row - 1] is 'e'
               freedoms -= 1
-          if stone.row + 1 > 18
+          if stone.row + 1 > NUMBER_OF_COLS-1
             freedoms -= 1
           else
             unless board[stone.column][stone.row + 1] is 'e'
               freedoms -= 1
-          if stone.column + 1 > 18
+          if stone.column + 1 > NUMBER_OF_COLS-1
             freedoms -= 1
           else
             unless board[stone.column + 1][stone.row] is 'e'
@@ -179,14 +188,14 @@ Meteor.methods
           #Actualizamos el array del tablero para contemplar posibles cambios
           totalStones = Stones.find(gameId: move.gameId).fetch()
           i = 0
-          while i < 19
-            board[i] = new Array(19)
+          while i < NUMBER_OF_COLS
+            board[i] = new Array(NUMBER_OF_ROWS)
             i++
 
           i = 0
-          while i < 19
+          while i < NUMBER_OF_COLS
             j = 0
-            while j < 19
+            while j < NUMBER_OF_ROWS
               board[i][j] = 'e'
               j++
             i++
@@ -206,7 +215,7 @@ Meteor.methods
               else
                 columnKO = stone.column
                 rowKO = stone.row - 1
-            if stone.row + 1 > 17
+            if stone.row + 1 > NUMBER_OF_COLS-2
               freedoms -= 1
             else
               if board[stone.column][stone.row + 1] is color
@@ -214,7 +223,7 @@ Meteor.methods
               else
                 columnKO = stone.column
                 rowKO = stone.row + 1
-            if stone.column + 1 > 17
+            if stone.column + 1 > NUMBER_OF_COLS-2
               freedoms -= 1
             else
               if board[stone.column + 1][stone.row] is color
